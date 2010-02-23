@@ -51,7 +51,7 @@
         // Opera only works with this character, not <wbr> or &shy;,
         // but IE6 displays this character, which is bad, so just use
         // it on Opera.
-        var wbr = $.browser.opera? '&#8203;' : ''
+        var wbr = $.browser.opera? '&#8203;' : '';
 
         ////////////////////////////////////////////////////////////////////////
         // Globals
@@ -64,8 +64,10 @@
         var promptLabel = config && config.promptLabel? config.promptLabel : "> ";
         var column = 0;
         var promptText = '';
+        var restoreText = '';
         // Prompt history stack
         var history = [];
+        var ringn = 0;
         // For reasons unknown to The Sword of Michael himself, Opera
         // triggers and sends a key character when you hit various
         // keys like PgUp, End, etc. So there is no way of knowing
@@ -81,6 +83,8 @@
             container.append(inner);
             inner.append(typer);
             typer.css({position:'absolute',top:0,left:'-999px'});
+            if (config.welcomeMessage)
+                message(config.welcomeMessage,'jquery-console-welcome');
             newPromptBox();
             if (config.autofocus) {
                 inner.addClass('jquery-console-focus');
@@ -192,11 +196,49 @@
                 break;
             }
             case keyCodes.ret:{
-                commandTrigger();
-                break;
+                commandTrigger(); break;
+            }
+            case keyCodes.up:{
+                rotateHistory(-1); break;
+            }
+            case keyCodes.down:{
+                rotateHistory(1); break;
             }
             default: //alert("Unknown control character: " + keyCode);
             }
+        };
+
+        ////////////////////////////////////////////////////////////////////////
+        // Rotate through the command history
+        function rotateHistory(n){
+            if (history.length == 0) return;
+            ringn += n;
+            if (ringn < 0) ringn = history.length;
+            else if (ringn > history.length) ringn = 0;
+            var prevText = promptText;
+            if (ringn == 0) {
+                promptText = restoreText;
+            } else {
+                promptText = history[ringn - 1];
+            }
+            if (config.historyPreserveColumn) {
+                if (promptText.length < column + 1) {
+                    column = promptText.length;
+                } else if (column == 0) {
+                    column = promptText.length;
+                }
+            } else if (config.historyColumnAtEnd) {
+                column = promptText.length;
+            } else {
+                column = 0;
+            }
+            updatePromptDisplay();
+        };
+
+        // Add something to the history ring
+        function addToHistory(line){
+            history.push(line);
+            restoreText = '';
         };
 
         // Delete the character at the current position
@@ -205,6 +247,7 @@
                 promptText =
                     promptText.substring(0,column) +
                     promptText.substring(column+1);
+                restoreText = promptText;
                 return true;
             } else return false;
         };
@@ -230,11 +273,7 @@
 
         // Scroll to the bottom of the view
         function scrollToBottom() {
-            if (config.animateScroll) {
-                inner.animate({ scrollTop: inner.attr("scrollHeight") });
-            } else {
-                inner.attr({ scrollTop: inner.attr("scrollHeight") });
-            }
+            inner.attr({ scrollTop: inner.attr("scrollHeight") });
         };
 
         ////////////////////////////////////////////////////////////////////////
@@ -247,18 +286,20 @@
                 if (typeof ret == 'boolean') {
                     if (ret) {
                         // Command succeeded without a result.
+                        addToHistory(promptText);
                         commandResult();
                     } else {
+                        addToHistory(promptText);
                         commandResult('Command failed.',
                                       "jquery-console-message-error");
                     }
                 } else if (typeof ret == "string") {
-                    history.push(promptText);
+                    addToHistory(promptText);
                     commandResult(ret,"jquery-console-message-success");
                 } else if (typeof ret == 'undefined') {
-                    history.push(promptText);
+                    addToHistory(promptText);
                 } else if (ret.length) {
-                    history.push(promptText);
+                    addToHistory(promptText);
                     commandResult(ret);
                 }
             }
@@ -303,6 +344,7 @@
             var after = promptText.substring(column);
             promptText = before + char + after;
             moveColumn(1);
+            restoreText = promptText;
             updatePromptDisplay();
         };
         
