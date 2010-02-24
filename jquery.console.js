@@ -132,8 +132,9 @@
         typer.keydown(function(e){
             var keyCode = e.keyCode;
             if (isControlCharacter(keyCode)){
-                typer.consoleControl(keyCode);
                 cancelKeyPress = keyCode;
+                typer.consoleControl(keyCode);
+                return false;
             }
         });
         
@@ -143,6 +144,7 @@
             var keyCode = e.keyCode || e.which;
             if (cancelKeyPress != keyCode && keyCode >= 32){
                 typer.consoleInsert(keyCode);
+                return false;
             }
         });
 
@@ -268,12 +270,11 @@
             } else {
                 handleCommand();
             }
-            scrollToBottom();
         };
 
         // Scroll to the bottom of the view
         function scrollToBottom() {
-            inner.attr({ scrollTop: inner.attr("scrollHeight") });
+            inner.attr({ scrollTop: inner.attr("scrollHeight") });;
         };
 
         ////////////////////////////////////////////////////////////////////////
@@ -328,11 +329,7 @@
             if (className) mesg.addClass(className);
             mesg.filledText(msg).hide();
             inner.append(mesg);
-            if (config.animateMessage){
-                mesg.slideDown(function(){ scrollToBottom(); });
-            } else {
-                mesg.show();
-            }
+            mesg.show();
         };
 
         ////////////////////////////////////////////////////////////////////////
@@ -385,7 +382,7 @@
                 html = htmlEncode(before) + current + htmlEncode(after);
             }
             prompt.html(html);
-            inner.attr({ scrollTop: inner.attr("scrollHeight") });
+            scrollToBottom();
         };
         
         // Simple HTML encoding
