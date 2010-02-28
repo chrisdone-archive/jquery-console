@@ -77,6 +77,9 @@
         // event succeeds.
         var cancelKeyPress = 0;
 
+        // External exports object
+        var extern = {};
+
         ////////////////////////////////////////////////////////////////////////
         // Main entry point
         (function(){
@@ -95,6 +98,24 @@
                 },100);
             }
         })();
+
+        ////////////////////////////////////////////////////////////////////////
+        // Reset terminal
+        extern.reset = function(){
+            var welcome = true;
+            inner.parent().fadeOut(function(){
+                inner.find('div').each(function(){
+                    if (!welcome) 
+                        $(this).remove();
+                    welcome = false;
+                });
+                newPromptBox();
+                inner.parent().fadeIn(function(){
+                    inner.addClass('jquery-console-focus');
+                    typer.focus();
+                });
+            });
+        };
 
         ////////////////////////////////////////////////////////////////////////
         // Make a new prompt box
@@ -116,6 +137,8 @@
             inner.addClass('jquery-console-focus');
             inner.removeClass('jquery-console-nofocus');
             typer.focus();
+            scrollToBottom();
+            return false;
         });
 
         ////////////////////////////////////////////////////////////////////////
@@ -130,11 +153,13 @@
         // For picking up control characters like up/left/down/right
 
         typer.keydown(function(e){
+            cancelKeyPress = 0;
             var keyCode = e.keyCode;
-            if (isControlCharacter(keyCode)){
+            if (isControlCharacter(keyCode)) {
                 cancelKeyPress = keyCode;
-                typer.consoleControl(keyCode);
-                return false;
+                if (!typer.consoleControl(keyCode)) {
+                    return false;
+                }
             }
         });
         
@@ -143,9 +168,10 @@
         typer.keypress(function(e){
             var keyCode = e.keyCode || e.which;
             if (cancelKeyPress != keyCode && keyCode >= 32){
+                if (cancelKeyPress) return false;
                 typer.consoleInsert(keyCode);
-                return false;
             }
+            if ($.browser.webkit) return false;
         });
 
         // Is a keycode a contorl character? 
@@ -168,11 +194,13 @@
             case keyCodes.left:{ 
                 moveColumn(-1);
                 updatePromptDisplay(); 
+                return false;
                 break;
             }
             case keyCodes.right:{
                 moveColumn(1); 
                 updatePromptDisplay();
+                return false;
                 break; 
             }
             case keyCodes.back:{
@@ -180,31 +208,35 @@
                     deleteCharAtPos();
                     updatePromptDisplay();
                 }
+                return false;
                 break;
             }
             case keyCodes.del:{
                 if (deleteCharAtPos())
                     updatePromptDisplay();
+                return false;
                 break;
             }
             case keyCodes.end:{
                 if (moveColumn(promptText.length-column))
                     updatePromptDisplay();
+                return false;
                 break;
             }
             case keyCodes.start:{
                 if (moveColumn(-column))
                     updatePromptDisplay();
+                return false;
                 break;
             }
             case keyCodes.ret:{
-                commandTrigger(); break;
+                commandTrigger(); return false;
             }
             case keyCodes.up:{
-                rotateHistory(-1); break;
+                rotateHistory(-1); return false;
             }
             case keyCodes.down:{
-                rotateHistory(1); break;
+                rotateHistory(1); return false;
             }
             default: //alert("Unknown control character: " + keyCode);
             }
@@ -398,6 +430,8 @@
                     .replace(/([^<>&]{10})/g,'$1<wbr>&shy;' + wbr)
             );
         };
+
+        return extern;
     };
     // Simple utility for printing messages
     $.fn.filledText = function(txt){
