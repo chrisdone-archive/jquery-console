@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+          "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <title>JQuery Console Demo</title>
+    <meta name="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+    <link rel="stylesheet" href="jquery.console.css" type="text/css" media="screen">
+    <script type="text/javascript" src="jquery.console.js"></script>
+    <!-- Everything beyond this point is user-customized -->
+    <script type="text/javascript">
+      $(document).ready(function(){
+         /* First console */
+         var console1 = $('<div class="console1">');
+         $('body').append(console1);
+         console1.console({
+           promptLabel: 'Demo> ',
+           commandValidate:function(line){
+             if (line == "") return false;
+             else return true;
+           },
+           commandHandle:function(line){
+               return [{msg:"=> [12,42]",
+                        className:"jquery-console-message-value"},
+                       {msg:":: [a]",
+                        className:"jquery-console-message-type"}]
+           },
+           autofocus:true,
+           animateScroll:true,
+           promptHistory:true
+         });
+         /* Second console */
+         var console2 = $('<div class="console2">');
+         $('body').append(console2);
+         console2.console({
+           promptLabel: 'JavaScript> ',
+           commandValidate:function(line){
+             if (line == "") return false;
+             else return true;
+           },
+           commandHandle:function(line){
+               try { var ret = eval(line);
+                     if (typeof ret != 'undefined') return ret.toString();
+                     else return true; }
+               catch (e) { return e.toString(); }
+           },
+           animateScroll:true,
+           promptHistory:true
+         });
+       });
+    </script>
+    <style type="text/css" media="screen">
+      /* First console */
+      div.console1 { font-size: 14px }
+      div.console1 div.jquery-console-inner 
+       { width:300px; height:200px; background:#333; padding:0.5em;
+         overflow:auto }
+      div.console1 div.jquery-console-prompt-box
+       { color:#fff; font-family:monospace; }
+      div.console1 div.jquery-console-focus span.jquery-console-cursor 
+       { background:#fefefe; color:#333; font-weight:bold }
+      div.console1 div.jquery-console-message-error
+       { color:#ef0505; font-family:sans-serif; font-weight:bold;
+         padding:0.1em; }
+      div.console1 div.jquery-console-message-value
+       { color:#1ad027; font-family:monospace;
+         padding:0.1em; }
+      div.console1 div.jquery-console-message-type
+       { color:#52666f; font-family:monospace;
+         padding:0.1em; }
+      div.console1 span.jquery-console-prompt-label { font-weight:bold }
+      /* Second console */
+      div.console2 { font-size: 14px; margin-top:1em }
+      div.console2 div.jquery-console-inner 
+       { width:300px; height:200px; background:#efefef; padding:0.5em;
+         overflow:auto }
+      div.console2 div.jquery-console-prompt-box
+       { color:#444; font-family:monospace; }
+      div.console2 div.jquery-console-focus span.jquery-console-cursor 
+       { background:#333; color:#eee; font-weight:bold }
+      div.console2 div.jquery-console-message-error
+       { color:#ef0505; font-family:sans-serif; font-weight:bold;
+         padding:0.1em; }
+      div.console2 div.jquery-console-message-success
+       { color:#187718; font-family:monospace;
+         padding:0.1em; }
+      div.console2 span.jquery-console-prompt-label { font-weight:bold }
+    </style>
+  </head>
+  <body>
+    <noscript>
+      <p>
+        <strong>Please enable JavaScript or upgrade your browser.</strong>
+      </p>
+    </noscript>
+    <h1>Simple console demo</h1>
+    <p>Tested on:</p>
+    <ul>
+      <li>Internet Explorer 6</li>
+      <li>Opera 10.01</li>
+      <li>Chromium 4.0.237.0 (Ubuntu build 31094)</li>
+      <li>Firefox 3.5.8</li>
+    </ul>
+  </body>
+</html>

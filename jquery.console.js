@@ -85,7 +85,7 @@
         (function(){
             container.append(inner);
             inner.append(typer);
-            typer.css({position:'absolute',top:0,left:'-999px'});
+            typer.css({position:'absolute',top:0,left:'-9999px'});
             if (config.welcomeMessage)
                 message(config.welcomeMessage,'jquery-console-welcome');
             newPromptBox();
@@ -97,6 +97,8 @@
                     typer.focus();
                 },100);
             }
+            extern.inner = inner;
+            extern.scrollToBottom = scrollToBottom;
         })();
 
         ////////////////////////////////////////////////////////////////////////
@@ -115,6 +117,34 @@
                     typer.focus();
                 });
             });
+        };
+
+        ////////////////////////////////////////////////////////////////////////
+        // Reset terminal
+        extern.notice = function(msg,style){
+            var n = $('<div class="notice"></div>').append($('<div></div>').text(msg))
+                .css({visibility:'hidden'});
+            container.append(n);
+            var focused = true;
+            if (style=='fadeout')
+                setTimeout(function(){
+                    n.fadeOut(function(){
+                        n.remove();
+                    });
+                },4000);
+            else if (style=='prompt') { 
+                var a = $('<br/><div class="action"><a href="javascript:">OK</a><div class="clear"></div></div>');
+                n.append(a);
+                focused = false;
+                a.click(function(){ n.fadeOut(function(){ n.remove();inner.css({opacity:1}) }); });
+            }
+            var h = n.height();
+            n.css({height:'0px',visibility:'visible'})
+                .animate({height:h+'px'},function(){
+                    if (!focused) inner.css({opacity:0.5});
+                });
+            n.css('cursor','default');
+            return n;
         };
 
         ////////////////////////////////////////////////////////////////////////
@@ -169,7 +199,9 @@
             var keyCode = e.keyCode || e.which;
             if (cancelKeyPress != keyCode && keyCode >= 32){
                 if (cancelKeyPress) return false;
-                typer.consoleInsert(keyCode);
+                if (typeof config.charInsertTrigger == 'function' &&
+                    config.charInsertTrigger(keyCode))
+                    typer.consoleInsert(keyCode);
             }
             if ($.browser.webkit) return false;
         });
