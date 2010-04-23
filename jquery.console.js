@@ -201,7 +201,7 @@
                 if (cancelKeyPress) return false;
                 if (typeof config.charInsertTrigger == 'undefined' ||
                     (typeof config.charInsertTrigger == 'function' &&
-                     config.charInsertTrigger(keyCode)))
+                     config.charInsertTrigger(keyCode,promptText)))
                     typer.consoleInsert(keyCode);
             }
             if ($.browser.webkit) return false;
