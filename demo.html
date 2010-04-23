@@ -26,7 +26,12 @@
            },
            autofocus:true,
            animateScroll:true,
-           promptHistory:true
+           promptHistory:true,
+           charInsertTrigger:function(keycode,line){
+              // Let you type until you press a-z
+              // Never allow zero.
+              return !line.match(/[a-z]+/) && keycode != '0'.charCodeAt(0);
+           }
          });
          /* Second console */
          var console2 = $('<div class="console2">');
@@ -42,6 +47,24 @@
                      if (typeof ret != 'undefined') return ret.toString();
                      else return true; }
                catch (e) { return e.toString(); }
+           },
+           animateScroll:true,
+           promptHistory:true,
+           welcomeMessage:'Enter some JavaScript expressions to evaluate.'
+         });
+         /* Second console */
+         var console3 = $('<div class="console2">');
+         $('body').append(console3);
+         console3.console({
+           promptLabel: 'Echo> ',
+           commandValidate:function(line){
+             if (line == "") return false;
+             else return true;
+           },
+           commandHandle:function(line,report){
+               setTimeout(function(){
+                  report(line);
+               },500);
            },
            animateScroll:true,
            promptHistory:true
