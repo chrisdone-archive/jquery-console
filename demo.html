@@ -36,7 +36,7 @@
          /* Second console */
          var console2 = $('<div class="console2">');
          $('body').append(console2);
-         console2.console({
+         var controller2 = console2.console({
            promptLabel: 'JavaScript> ',
            commandValidate:function(line){
              if (line == "") return false;
@@ -52,6 +52,7 @@
            promptHistory:true,
            welcomeMessage:'Enter some JavaScript expressions to evaluate.'
          });
+         controller2.promptText('5 * 4');
          /* Second console */
          var console3 = $('<div class="console2">');
          $('body').append(console3);

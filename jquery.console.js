@@ -420,6 +420,16 @@
             } else return false;
         };
 
+        extern.promptText = function(text){
+            if (text) {
+                promptText = text;
+                if (column > promptText.length)
+                    column = promptText.length;
+                updatePromptDisplay();
+            }
+            return promptText;
+        };
+
         ////////////////////////////////////////////////////////////////////////
         // Update the prompt display
         function updatePromptDisplay(){
