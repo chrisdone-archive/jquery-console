@@ -53,7 +53,7 @@
            welcomeMessage:'Enter some JavaScript expressions to evaluate.'
          });
          controller2.promptText('5 * 4');
-         /* Second console */
+         /* Third console */
          var console3 = $('<div class="console2">');
          $('body').append(console3);
          console3.console({
@@ -63,9 +63,7 @@
              else return true;
            },
            commandHandle:function(line,report){
-               setTimeout(function(){
-                  report(line);
-               },500);
+               report(line);
            },
            animateScroll:true,
            promptHistory:true

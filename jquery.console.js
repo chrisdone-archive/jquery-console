@@ -346,26 +346,21 @@
         // Handle a command
         function handleCommand() {
             if (typeof config.commandHandle == 'function') {
+                addToHistory(promptText);
                 var ret = config.commandHandle(promptText,function(msgs){
                     commandResult(msgs);
                 });
                 if (typeof ret == 'boolean') {
                     if (ret) {
                         // Command succeeded without a result.
-                        addToHistory(promptText);
                         commandResult();
                     } else {
-                        addToHistory(promptText);
                         commandResult('Command failed.',
                                       "jquery-console-message-error");
                     }
                 } else if (typeof ret == "string") {
-                    addToHistory(promptText);
                     commandResult(ret,"jquery-console-message-success");
-                } else if (typeof ret == 'undefined') {
-                    addToHistory(promptText);
                 } else if (ret.length) {
-                    addToHistory(promptText);
                     commandResult(ret);
                 }
             }
