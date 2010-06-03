@@ -46,7 +46,7 @@
         // Constants
         // Some are enums, data types, others just for optimisation
         var keyCodes = { left:37,right:39,up:38,down:40,back:8,del:46,
-                         end:35,start:36,ret:13 };
+                         end:35,start:36,ret:13,tab:18};
         var cursor = '<span class="jquery-console-cursor">&nbsp;</span>';
         // Opera only works with this character, not <wbr> or &shy;,
         // but IE6 displays this character, which is bad, so just use
@@ -100,6 +100,7 @@
                 },100);
             }
             extern.inner = inner;
+            extern.typer = typer;
             extern.scrollToBottom = scrollToBottom;
         })();
 
@@ -201,6 +202,9 @@
         // Handle key press
         typer.keypress(function(e){
             var keyCode = e.keyCode || e.which;
+            if (isIgnorableKey(e)) {
+                return false;
+            }
             if (acceptInput && cancelKeyPress != keyCode && keyCode >= 32){
                 if (cancelKeyPress) return false;
                 if (typeof config.charInsertTrigger == 'undefined' ||
@@ -223,6 +227,11 @@
             );
         };
 
+        function isIgnorableKey(e) {
+            // for now just filter alt+tab that we receive on some platforms when
+            // user switches windows (goes away from the browser)
+            return ((e.keyCode == keyCodes.tab || e.keyCode == 192) && e.altKey);
+        };
         ////////////////////////////////////////////////////////////////////////
         // Handle console control keys
         // E.g. up, down, left, right, backspc, return, etc.
