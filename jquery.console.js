@@ -152,6 +152,7 @@
         function newPromptBox() {
             column = 0;
             promptText = '';
+	    ringn = 0; // Reset the position of the history ring
             promptBox = $('<div class="jquery-console-prompt-box"></div>');
             var label = $('<span class="jquery-console-prompt-label"></span>');
             promptBox.append(label.text(promptLabel).show());
