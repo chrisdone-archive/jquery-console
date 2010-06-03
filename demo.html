@@ -63,7 +63,9 @@
              else return true;
            },
            commandHandle:function(line,report){
-               report(line);
+               setTimeout(function() {
+		   report(line);
+	       },1000);
            },
            animateScroll:true,
            promptHistory:true

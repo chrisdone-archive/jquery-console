@@ -76,6 +76,8 @@
         // variable below to ignore the keypress event if the keydown
         // event succeeds.
         var cancelKeyPress = 0;
+	// When this value is false, the prompt will not respond to input
+	var acceptInput = true;
 
         // External exports object
         var extern = {};
@@ -153,6 +155,7 @@
             column = 0;
             promptText = '';
 	    ringn = 0; // Reset the position of the history ring
+	    enableInput();
             promptBox = $('<div class="jquery-console-prompt-box"></div>');
             var label = $('<span class="jquery-console-prompt-label"></span>');
             promptBox.append(label.text(promptLabel).show());
@@ -186,7 +189,7 @@
         typer.keydown(function(e){
             cancelKeyPress = 0;
             var keyCode = e.keyCode;
-            if (isControlCharacter(keyCode)) {
+            if (acceptInput && isControlCharacter(keyCode)) {
                 cancelKeyPress = keyCode;
                 if (!typer.consoleControl(keyCode)) {
                     return false;
@@ -198,7 +201,7 @@
         // Handle key press
         typer.keypress(function(e){
             var keyCode = e.keyCode || e.which;
-            if (cancelKeyPress != keyCode && keyCode >= 32){
+            if (acceptInput && cancelKeyPress != keyCode && keyCode >= 32){
                 if (cancelKeyPress) return false;
                 if (typeof config.charInsertTrigger == 'undefined' ||
                     (typeof config.charInsertTrigger == 'function' &&
@@ -208,7 +211,7 @@
             if ($.browser.webkit) return false;
         });
 
-        // Is a keycode a contorl character? 
+        // Is a keycode a control character? 
         // E.g. up, down, left, right, backspc, return, etc.
         function isControlCharacter(keyCode){
             // TODO: Make more precise/fast.
@@ -347,6 +350,7 @@
         // Handle a command
         function handleCommand() {
             if (typeof config.commandHandle == 'function') {
+		disableInput();
                 addToHistory(promptText);
                 var ret = config.commandHandle(promptText,function(msgs){
                     commandResult(msgs);
@@ -361,11 +365,22 @@
                     }
                 } else if (typeof ret == "string") {
                     commandResult(ret,"jquery-console-message-success");
-                } else if (ret.length) {
+                } else if (typeof ret == 'object' && ret.length) {
                     commandResult(ret);
                 }
             }
         };
+
+        ////////////////////////////////////////////////////////////////////////
+        // Disable input
+	function disableInput() {
+	    acceptInput = false;
+	};
+
+        // Enable input
+	function enableInput() {
+	    acceptInput = true;
+	}
 
         ////////////////////////////////////////////////////////////////////////
         // Reset the prompt in invalid command
