@@ -321,7 +321,7 @@
 
         // Delete the character at the current position
         function deleteCharAtPos(){
-            if (promptText != ''){
+            if (column < promptText.length){
                 promptText =
                     promptText.substring(0,column) +
                     promptText.substring(column+1);
@@ -343,16 +343,21 @@
 	};
 
 	function deleteUntilEnd() {
-	    while(deleteCharAtPos())
+	    while(deleteCharAtPos()) {
 		updatePromptDisplay();
+	    }
 	};
 
 	function deleteNextWord() {
+	    // A word is defined within this context as a series of alphanumeric
+	    // characters.
+	    // Delete up to the next alphanumeric character
 	    while(column < promptText.length &&
 		  !isCharAlphanumeric(promptText[column])) {
 		deleteCharAtPos();
 		updatePromptDisplay();
 	    }
+	    // Then, delete until the next non-alphanumeric character
 	    while(column < promptText.length &&
 		  isCharAlphanumeric(promptText[column])) {
 		deleteCharAtPos();
@@ -506,19 +511,26 @@
 	};
 
 	function moveToPreviousWord() {
-	    while(moveBackward() && !isCharAlphanumeric(promptText[column])) {
+	    // Move backward until we find the first alphanumeric
+	    while(column -1 >= 0 &&
+		  !isCharAlphanumeric(promptText[column-1]) &&
+		  moveBackward()) {
 	    }
-	    while(moveBackward() && isCharAlphanumeric(promptText[column])) {
+	    // Move until we find the first non-alphanumeric
+	    while(column -1 >= 0 &&
+		  isCharAlphanumeric(promptText[column-1]) &&
+		  moveBackward()) {
 	    }
-	    if(column != 0)
-		moveForward();
 	};
 
 	function isCharAlphanumeric(charToTest) {
-	    var code = charToTest.charCodeAt();
-	    return (code >= 'A'.charCodeAt() && code <= 'Z'.charCodeAt()) ||
-		(code >= 'a'.charCodeAt() && code <= 'z'.charCodeAt()) ||
-		(code >= '0'.charCodeAt() && code <= '9'.charCodeAt());
+	    if(typeof charToTest == 'string') {
+		var code = charToTest.charCodeAt();
+		return (code >= 'A'.charCodeAt() && code <= 'Z'.charCodeAt()) ||
+		    (code >= 'a'.charCodeAt() && code <= 'z'.charCodeAt()) ||
+		    (code >= '0'.charCodeAt() && code <= '9'.charCodeAt());
+	    }
+	    return false;
 	};
 
 	function doNothing() {};
