@@ -45,8 +45,28 @@
         ////////////////////////////////////////////////////////////////////////
         // Constants
         // Some are enums, data types, others just for optimisation
-        var keyCodes = { left:37,right:39,up:38,down:40,back:8,del:46,
-                         end:35,start:36,ret:13,tab:18};
+        var keyCodes = {
+	    // left
+	    37: moveBackward,
+	    // right
+	    39: moveForward,
+	    // up
+	    38: previousHistory,
+	    // down
+	    40: nextHistory,
+	    // backspace
+	    8:  backDelete,
+	    // delete
+	    46: forwardDelete,
+            // end
+	    35: moveToEnd,
+	    // start
+	    36: moveToStart,
+	    // return
+	    13: commandTrigger,
+	    // tab
+	    18: doNothing
+	};
         var cursor = '<span class="jquery-console-cursor">&nbsp;</span>';
         // Opera only works with this character, not <wbr> or &shy;,
         // but IE6 displays this character, which is bad, so just use
@@ -190,12 +210,13 @@
         typer.keydown(function(e){
             cancelKeyPress = 0;
             var keyCode = e.keyCode;
-            if (acceptInput && isControlCharacter(keyCode)) {
+            if (acceptInput && keyCode in keyCodes) {
                 cancelKeyPress = keyCode;
-                if (!typer.consoleControl(keyCode)) {
-                    return false;
-                }
-            }
+		(keyCodes[keyCode])();
+                return false;
+            } else if (acceptInput && e.ctrlKey && isCtrlCombo(keyCode)) {
+	    } else if (acceptInput && e.altKey  && isAltCombo(keyCode)) {
+	    }
         });
         
         ////////////////////////////////////////////////////////////////////////
@@ -215,77 +236,10 @@
             if ($.browser.webkit) return false;
         });
 
-        // Is a keycode a control character? 
-        // E.g. up, down, left, right, backspc, return, etc.
-        function isControlCharacter(keyCode){
-            // TODO: Make more precise/fast.
-            return (
-                (keyCode >= keyCodes.left && keyCode <= keyCodes.down)
-                    || keyCode == keyCodes.back || keyCode == keyCodes.del
-                    || keyCode == keyCodes.end || keyCode == keyCodes.start
-                    || keyCode == keyCodes.ret
-            );
-        };
-
         function isIgnorableKey(e) {
             // for now just filter alt+tab that we receive on some platforms when
             // user switches windows (goes away from the browser)
             return ((e.keyCode == keyCodes.tab || e.keyCode == 192) && e.altKey);
-        };
-        ////////////////////////////////////////////////////////////////////////
-        // Handle console control keys
-        // E.g. up, down, left, right, backspc, return, etc.
-        typer.consoleControl = function(keyCode){
-            switch (keyCode){
-            case keyCodes.left:{ 
-                moveColumn(-1);
-                updatePromptDisplay(); 
-                return false;
-                break;
-            }
-            case keyCodes.right:{
-                moveColumn(1); 
-                updatePromptDisplay();
-                return false;
-                break; 
-            }
-            case keyCodes.back:{
-                if (moveColumn(-1)){
-                    deleteCharAtPos();
-                    updatePromptDisplay();
-                }
-                return false;
-                break;
-            }
-            case keyCodes.del:{
-                if (deleteCharAtPos())
-                    updatePromptDisplay();
-                return false;
-                break;
-            }
-            case keyCodes.end:{
-                if (moveColumn(promptText.length-column))
-                    updatePromptDisplay();
-                return false;
-                break;
-            }
-            case keyCodes.start:{
-                if (moveColumn(-column))
-                    updatePromptDisplay();
-                return false;
-                break;
-            }
-            case keyCodes.ret:{
-                commandTrigger(); return false;
-            }
-            case keyCodes.up:{
-                rotateHistory(-1); return false;
-            }
-            case keyCodes.down:{
-                rotateHistory(1); return false;
-            }
-            default: //alert("Unknown control character: " + keyCode);
-            }
         };
 
         ////////////////////////////////////////////////////////////////////////
@@ -315,6 +269,14 @@
             updatePromptDisplay();
         };
 
+	function previousHistory() {
+	    rotateHistory(-1);
+	};
+
+	function nextHistory() {
+	    rotatehistory(1);
+	};
+
         // Add something to the history ring
         function addToHistory(line){
             history.push(line);
@@ -331,6 +293,18 @@
                 return true;
             } else return false;
         };
+
+	function backDelete() {
+            if (moveColumn(-1)){
+                deleteCharAtPos();
+                updatePromptDisplay();
+            }
+	};
+	
+	function forwardDelete() {
+            if (deleteCharAtPos())
+                updatePromptDisplay();
+	};
 
         ////////////////////////////////////////////////////////////////////////
         // Validate command and trigger it if valid, or show a validation error
@@ -439,6 +413,28 @@
                 return true;
             } else return false;
         };
+
+	function moveForward() {
+            if(moveColumn(1))
+		updatePromptDisplay();
+	};
+
+	function moveBackward() {
+            if(moveColumn(-1))
+		updatePromptDisplay();
+	};
+
+	function moveToStart() {
+            if (moveColumn(-column))
+                updatePromptDisplay();
+	};
+
+	function moveToEnd() {
+            if (moveColumn(promptText.length-column))
+                updatePromptDisplay();
+	};
+
+	function doNothing() {};
 
         extern.promptText = function(text){
             if (text) {
