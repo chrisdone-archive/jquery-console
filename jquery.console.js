@@ -67,6 +67,34 @@
 	    // tab
 	    18: doNothing
 	};
+	var ctrlCodes = {
+	    // C-a
+	    65: moveToStart,
+	    // C-e
+	    69: moveToEnd,
+	    // C-d
+	    68: forwardDelete,
+	    // C-n
+	    78: nextHistory,
+	    // C-p
+	    80: previousHistory,
+	    // C-b
+	    66: moveBackward,
+	    // C-f
+	    70: moveForward,
+	    // C-k
+	    75: deleteUntilEnd,
+	    // C-c
+	    67: doNothing // for now
+	};
+	var altCodes = {
+	    // M-f
+	    70: moveToNextWord,
+	    // M-b
+	    66: moveToPreviousWord,
+	    // M-d
+	    68: deleteNextWord
+	};
         var cursor = '<span class="jquery-console-cursor">&nbsp;</span>';
         // Opera only works with this character, not <wbr> or &shy;,
         // but IE6 displays this character, which is bad, so just use
@@ -210,12 +238,20 @@
         typer.keydown(function(e){
             cancelKeyPress = 0;
             var keyCode = e.keyCode;
-            if (acceptInput && keyCode in keyCodes) {
-                cancelKeyPress = keyCode;
-		(keyCodes[keyCode])();
-                return false;
-            } else if (acceptInput && e.ctrlKey && isCtrlCombo(keyCode)) {
-	    } else if (acceptInput && e.altKey  && isAltCombo(keyCode)) {
+	    if (acceptInput) {
+		if (keyCode in keyCodes) {
+                    cancelKeyPress = keyCode;
+		    (keyCodes[keyCode])();
+		    return false;
+		} else if (e.ctrlKey && keyCode in ctrlCodes) {
+                    cancelKeyPress = keyCode;
+		    (ctrlCodes[keyCode])();
+		    return false;
+		} else if (e.altKey  && keyCode in altCodes) {
+                    cancelKeyPress = keyCode;
+		    (altCodes[keyCode])();
+		    return false;
+		}
 	    }
         });
         
@@ -274,7 +310,7 @@
 	};
 
 	function nextHistory() {
-	    rotatehistory(1);
+	    rotateHistory(1);
 	};
 
         // Add something to the history ring
@@ -304,6 +340,24 @@
 	function forwardDelete() {
             if (deleteCharAtPos())
                 updatePromptDisplay();
+	};
+
+	function deleteUntilEnd() {
+	    while(deleteCharAtPos())
+		updatePromptDisplay();
+	};
+
+	function deleteNextWord() {
+	    while(column < promptText.length &&
+		  !isCharAlphanumeric(promptText[column])) {
+		deleteCharAtPos();
+		updatePromptDisplay();
+	    }
+	    while(column < promptText.length &&
+		  isCharAlphanumeric(promptText[column])) {
+		deleteCharAtPos();
+		updatePromptDisplay();
+	    }
 	};
 
         ////////////////////////////////////////////////////////////////////////
@@ -415,13 +469,19 @@
         };
 
 	function moveForward() {
-            if(moveColumn(1))
+            if(moveColumn(1)) {
 		updatePromptDisplay();
+		return true;
+	    }
+	    return false;
 	};
 
 	function moveBackward() {
-            if(moveColumn(-1))
+            if(moveColumn(-1)) {
 		updatePromptDisplay();
+		return true;
+	    }
+	    return false;
 	};
 
 	function moveToStart() {
@@ -432,6 +492,33 @@
 	function moveToEnd() {
             if (moveColumn(promptText.length-column))
                 updatePromptDisplay();
+	};
+
+	function moveToNextWord() {
+	    while(column < promptText.length &&
+		  !isCharAlphanumeric(promptText[column]) &&
+		  moveForward()) {
+	    }
+	    while(column < promptText.length &&
+		  isCharAlphanumeric(promptText[column]) &&
+		  moveForward()) {
+	    }
+	};
+
+	function moveToPreviousWord() {
+	    while(moveBackward() && !isCharAlphanumeric(promptText[column])) {
+	    }
+	    while(moveBackward() && isCharAlphanumeric(promptText[column])) {
+	    }
+	    if(column != 0)
+		moveForward();
+	};
+
+	function isCharAlphanumeric(charToTest) {
+	    var code = charToTest.charCodeAt();
+	    return (code >= 'A'.charCodeAt() && code <= 'Z'.charCodeAt()) ||
+		(code >= 'a'.charCodeAt() && code <= 'z'.charCodeAt()) ||
+		(code >= '0'.charCodeAt() && code <= '9'.charCodeAt());
 	};
 
 	function doNothing() {};
