@@ -297,10 +297,8 @@
                 } else if (column == 0) {
                     column = promptText.length;
                 }
-            } else if (config.historyColumnAtEnd) {
-                column = promptText.length;
             } else {
-                column = 0;
+                column = promptText.length;
             }
             updatePromptDisplay();
         };
