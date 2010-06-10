@@ -1,7 +1,7 @@
 // JQuery Console 1.0
 // Sun Feb 21 20:28:47 GMT 2010
 //
-// Copyright 2010 Chris Done. All rights reserved.
+// Copyright 2010 Chris Done, Simon David Pratt. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
@@ -10,35 +10,32 @@
 //    1. Redistributions of source code must retain the above
 //       copyright notice, this list of conditions and the following
 //       disclaimer.
-
+//
 //    2. Redistributions in binary form must reproduce the above
 //       copyright notice, this list of conditions and the following
 //       disclaimer in the documentation and/or other materials
 //       provided with the distribution.
 //
-// THIS SOFTWARE IS PROVIDED BY CHRIS DONE ``AS IS'' AND ANY EXPRESS
-// OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED. IN NO EVENT SHALL CHRIS DONE OR CONTRIBUTORS BE
-// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-// CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
-// OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
-// BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
-// USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
-// DAMAGE.
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+// FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE 
+// COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, 
+// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
+// BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN 
+// ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+// POSSIBILITY OF SUCH DAMAGE.
 
-// The views and conclusions contained in the software and
-// documentation are those of the authors and should not be
-// interpreted as representing official policies, either expressed or
-// implied, of Chris Done.
-//
 // TESTED ON
 //   Internet Explorer 6
 //   Opera 10.01
 //   Chromium 4.0.237.0 (Ubuntu build 31094)
-//   Firefox 3.5.8
+//   Firefox 3.5.8, 3.6.2 (Mac)
+//   Safari 4.0.5 (6531.22.7) (Mac)
+//   Google Chrome 5.0.375.55 (Mac)
 
 (function($){
     $.fn.console = function(config){
@@ -83,9 +80,7 @@
 	    // C-f
 	    70: moveForward,
 	    // C-k
-	    75: deleteUntilEnd,
-	    // C-c
-	    67: doNothing // for now
+	    75: deleteUntilEnd
 	};
 	var altCodes = {
 	    // M-f
@@ -126,6 +121,8 @@
         var cancelKeyPress = 0;
 	// When this value is false, the prompt will not respond to input
 	var acceptInput = true;
+	// When this value is true, the command has been canceled
+	var cancelCommand = false;
 
         // External exports object
         var extern = {};
@@ -238,6 +235,12 @@
         typer.keydown(function(e){
             cancelKeyPress = 0;
             var keyCode = e.keyCode;
+	    // C-c: cancel the execution
+	    if(e.ctrlKey && keyCode == 67) {
+		cancelKeyPress = keyCode;
+		cancelExecution();
+		return false;
+	    }
 	    if (acceptInput) {
 		if (keyCode in keyCodes) {
                     cancelKeyPress = keyCode;
@@ -387,6 +390,12 @@
         function scrollToBottom() {
             inner.attr({ scrollTop: inner.attr("scrollHeight") });;
         };
+
+	function cancelExecution() {
+	    if(typeof config.cancelHandle == 'function') {
+		config.cancelHandle();
+	    }
+	}
 
         ////////////////////////////////////////////////////////////////////////
         // Handle a command
