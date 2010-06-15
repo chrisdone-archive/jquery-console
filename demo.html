@@ -80,6 +80,27 @@
            animateScroll:true,
            promptHistory:true
          });
+         /* Fourth console */
+         var console4 = $('<div class="console4">');
+         $('body').append(console4);
+         var controller4 = console4.console({
+           promptLabel: 'SQL> ',
+           continuedPromptLabel: '  -> ',
+           commandValidate:function(line){
+             if (line == "") return false;
+             else return true;
+           },
+           commandHandle:function(line,report){
+              if (line.match(/;$/)) {
+                 controller4.continuedPrompt = false;
+                 return true;
+              } else {
+                 controller4.continuedPrompt = true;
+                 return;
+              }
+           },
+           promptHistory:true
+         });
        });
     </script>
     <style type="text/css" media="screen">
@@ -133,7 +154,24 @@
       div.console3 div.jquery-console-message-success
        { color:#187718; font-family:monospace;
          padding:0.1em; }
-      div.console3 span.jquery-console-prompt-label { font-weight:bold }
+      div.console3 span.jquery-console-prompt-label {
+      font-weight:bold }
+      /* Fourth console */
+      div.console4 { font-size: 14px; margin-top:1em }
+      div.console4 div.jquery-console-inner 
+       { width:900px; height:200px; background:#efefef; padding:0.5em;
+         overflow:auto }
+      div.console4 div.jquery-console-prompt-box
+       { color:#444; font-family:monospace; }
+      div.console4 div.jquery-console-focus span.jquery-console-cursor 
+       { background:#444; color:#eee; font-weight:bold }
+      div.console4 div.jquery-console-message-error
+       { color:#ef0505; font-family:sans-serif; font-weight:bold;
+         padding:0.1em; }
+      div.console4 div.jquery-console-message-success
+       { color:#187718; font-family:monospace;
+         padding:0.1em; }
+      div.console4 span.jquery-console-prompt-label { font-weight:bold }
     </style>
   </head>
   <body>
