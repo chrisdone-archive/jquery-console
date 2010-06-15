@@ -157,6 +157,7 @@
                 inner.find('div').each(function(){
                     if (!welcome) {
                         $(this).remove();
+		    } else {
 			welcome = false;
 		    }
                 });
