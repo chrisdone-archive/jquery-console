@@ -105,9 +105,12 @@
         var promptBox;
         var prompt;
         var promptLabel = config && config.promptLabel? config.promptLabel : "> ";
+        var continuedPromptLabel = config && config.continuedPromptLabel?
+        config.continuedPromptLabel : "> ";
         var column = 0;
         var promptText = '';
         var restoreText = '';
+        var continuedText = '';
         // Prompt history stack
         var history = [];
         var ringn = 0;
@@ -206,7 +209,8 @@
 	    enableInput();
             promptBox = $('<div class="jquery-console-prompt-box"></div>');
             var label = $('<span class="jquery-console-prompt-label"></span>');
-            promptBox.append(label.text(promptLabel).show());
+            var labelText = extern.continuedPrompt? continuedPromptLabel : promptLabel;
+            promptBox.append(label.text(labelText).show());
             prompt = $('<span class="jquery-console-prompt"></span>');
             promptBox.append(prompt);
             inner.append(promptBox);
@@ -403,9 +407,18 @@
             if (typeof config.commandHandle == 'function') {
 		disableInput();
                 addToHistory(promptText);
-                var ret = config.commandHandle(promptText,function(msgs){
+                var text = promptText;
+                if (extern.continuedPrompt) {
+                  if (continuedText)
+                    continuedText += '\n' + promptText;
+                  else continuedText = promptText;
+                } else continuedText = undefined;
+                if (continuedText) text = continuedText;
+                var ret = config.commandHandle(text,function(msgs){
                     commandResult(msgs);
                 });
+                if (extern.continuedPrompt && !continuedText)
+                  continuedText = promptText;
                 if (typeof ret == 'boolean') {
                     if (ret) {
                         // Command succeeded without a result.
@@ -418,6 +431,8 @@
                     commandResult(ret,"jquery-console-message-success");
                 } else if (typeof ret == 'object' && ret.length) {
                     commandResult(ret);
+                } else if (extern.continuedPrompt) {
+                    commandResult();
                 }
             }
         };
