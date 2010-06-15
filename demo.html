@@ -93,6 +93,7 @@
            commandHandle:function(line,report){
               if (line.match(/;$/)) {
                  controller4.continuedPrompt = false;
+                 alert("Execute: " + line);
                  return true;
               } else {
                  controller4.continuedPrompt = true;
