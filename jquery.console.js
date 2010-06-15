@@ -546,8 +546,7 @@
         extern.promptText = function(text){
             if (text) {
                 promptText = text;
-                if (column > promptText.length)
-                    column = promptText.length;
+                column = promptText.length;
                 updatePromptDisplay();
             }
             return promptText;
