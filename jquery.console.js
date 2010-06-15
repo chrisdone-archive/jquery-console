@@ -152,12 +152,13 @@
         ////////////////////////////////////////////////////////////////////////
         // Reset terminal
         extern.reset = function(){
-            var welcome = true;
+            var welcome = (typeof config.welcomeMessage != 'undefined');
             inner.parent().fadeOut(function(){
                 inner.find('div').each(function(){
-                    if (!welcome) 
+                    if (!welcome) {
                         $(this).remove();
-                    welcome = false;
+			welcome = false;
+		    }
                 });
                 newPromptBox();
                 inner.parent().fadeIn(function(){

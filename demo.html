@@ -12,7 +12,7 @@
          /* First console */
          var console1 = $('<div class="console1">');
          $('body').append(console1);
-         console1.console({
+         var controller1 = console1.console({
            promptLabel: 'Demo> ',
            commandValidate:function(line){
              if (line == "") return false;
@@ -57,7 +57,7 @@
          var console3CancelFlag = false;
          var console3 = $('<div class="console3">');
          $('body').append(console3);
-         console3.console({
+         var controller3 = console3.console({
            promptLabel: 'Echo> ',
            commandValidate:function(line){
              if (line == "") return false;
