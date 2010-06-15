@@ -211,6 +211,7 @@
             var label = $('<span class="jquery-console-prompt-label"></span>');
             var labelText = extern.continuedPrompt? continuedPromptLabel : promptLabel;
             promptBox.append(label.text(labelText).show());
+            label.html(label.html().replace(' ','&nbsp;'));
             prompt = $('<span class="jquery-console-prompt"></span>');
             promptBox.append(prompt);
             inner.append(promptBox);
