@@ -100,7 +100,9 @@
         // Globals
         var container = $(this);
         var inner = $('<div class="jquery-console-inner"></div>');
-        var typer = $('<input class="jquery-console-typer" type="text">');
+        // erjiang: changed this from a text input to a textarea so we
+        // can get pasted newlines
+        var typer = $('<textarea class="jquery-console-typer"></textarea>');
         // Prompt
         var promptBox;
         var prompt;
@@ -625,6 +627,7 @@
                     .replace(/</g,'&lt;')
                     .replace(/</g,'&lt;')
                     .replace(/ /g,'&nbsp;')
+                    .replace(/\n/g,'<br />')
                     .replace(/([^<>&]{10})/g,'$1<wbr>&shy;' + wbr)
             );
         };
