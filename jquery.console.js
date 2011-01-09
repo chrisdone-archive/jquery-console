@@ -288,6 +288,10 @@
             if (isIgnorableKey(e)) {
                 return false;
             }
+          // // C-v: don't insert on paste event
+            if (e.ctrlKey && String.fromCharCode(keyCode).toLowerCase() == 'v') {
+              return true;
+            }
             if (acceptInput && cancelKeyPress != keyCode && keyCode >= 32){
                 if (cancelKeyPress) return false;
                 if (typeof config.charInsertTrigger == 'undefined' ||
