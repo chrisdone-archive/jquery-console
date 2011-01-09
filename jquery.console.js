@@ -234,7 +234,21 @@
             inner.removeClass('jquery-console-focus');
             inner.addClass('jquery-console-nofocus');
         });
-
+        
+        ////////////////////////////////////////////////////////////////////////
+        // Bind to the paste event of the input box so we know when we
+        // get pasted data
+        typer.bind('paste', function(e) {
+            // wipe typer input clean just in case
+            typer.val("");
+            // this timeout is required because the onpaste event is
+            // fired *before* the text is actually pasted
+            setTimeout(function() {
+                typer.consoleInsert(typer.val());
+                typer.val("");
+            }, 0);
+        });
+        
         ////////////////////////////////////////////////////////////////////////
         // Handle key hit before translation
         // For picking up control characters like up/left/down/right
@@ -477,13 +491,15 @@
 
         ////////////////////////////////////////////////////////////////////////
         // Handle normal character insertion
-        typer.consoleInsert = function(keyCode){
+        // data can either be a number, which will be interpreted as the
+        // numeric value of a single character, or a string
+        typer.consoleInsert = function(data){
             // TODO: remove redundant indirection
-            var char = String.fromCharCode(keyCode);
+            var text = isNaN(data) ? data : String.fromCharCode(data);
             var before = promptText.substring(0,column);
             var after = promptText.substring(column);
-            promptText = before + char + after;
-            moveColumn(1);
+            promptText = before + text + after;
+            moveColumn(text.length);
             restoreText = promptText;
             updatePromptDisplay();
         };
