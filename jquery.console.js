@@ -38,32 +38,51 @@
 //   Google Chrome 5.0.375.55 (Mac)
 
 (function($){
+    //
+    // Detect whether we are running an iOS device
+    if( navigator.platform.indexOf("iPhone") != -1 ||
+        navigator.platform.indexOf("iPod") != -1 ||
+        navigator.platform.indexOf("iPad") != -1) {
+        $.browser.ios = true;
+    }
     $.fn.console = function(config){
         ////////////////////////////////////////////////////////////////////////
         // Constants
         // Some are enums, data types, others just for optimisation
+    if(!$.browser.ios) {
         var keyCodes = {
-	    // left
-	    37: moveBackward,
-	    // right
-	    39: moveForward,
-	    // up
-	    38: previousHistory,
-	    // down
-	    40: nextHistory,
-	    // backspace
-	    8:  backDelete,
-	    // delete
-	    46: forwardDelete,
+            // left
+            37: moveBackward,
+            // right
+            39: moveForward,
+            // up
+            38: previousHistory,
+            // down
+            40: nextHistory,
+            // backspace
+            8:  backDelete,
+            // delete
+            46: forwardDelete,
             // end
-	    35: moveToEnd,
-	    // start
-	    36: moveToStart,
-	    // return
-	    13: commandTrigger,
-	    // tab
-	    18: doNothing
-	};
+            35: moveToEnd,
+            // start
+            36: moveToStart,
+            // return
+            13: commandTrigger,
+            10: commandTrigger,
+            // tab
+            18: doNothing
+        };
+    }
+    else {
+        var keyCodes = {
+            // backspace
+            127:backDelete,
+            // return
+            10: commandTrigger,
+	    };
+    }
+
 	var ctrlCodes = {
 	    // C-a
 	    65: moveToStart,
