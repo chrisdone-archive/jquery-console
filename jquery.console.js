@@ -91,10 +91,6 @@
 	    68: deleteNextWord
 	};
         var cursor = '<span class="jquery-console-cursor">&nbsp;</span>';
-        // Opera only works with this character, not <wbr> or &shy;,
-        // but IE6 displays this character, which is bad, so just use
-        // it on Opera.
-        var wbr = $.browser.opera? '' : '<wbr>&shy;';
 
         ////////////////////////////////////////////////////////////////////////
         // Globals
@@ -632,7 +628,6 @@
                     .replace(/</g,'&lt;')
                     .replace(/ /g,'&nbsp;')
                     .replace(/\n/g,'<br />')
-                    .replace(/([^<>&]{10})/g,'$1' + wbr)
             );
         };
 
