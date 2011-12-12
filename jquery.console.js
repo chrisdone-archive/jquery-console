@@ -409,7 +409,12 @@
 
         // Scroll to the bottom of the view
         function scrollToBottom() {
-            inner.attr({ scrollTop: inner.attr("scrollHeight") });;
+            if (jQuery.fn.jquery > "1.6") {
+                inner.prop({ scrollTop: inner.prop("scrollHeight") });
+            }
+            else {
+                inner.attr({ scrollTop: inner.attr("scrollHeight") });
+            }
         };
 
 	function cancelExecution() {
