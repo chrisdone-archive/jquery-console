@@ -18,6 +18,10 @@ Options available:
 
  promptLabel            string    Prompt string like 'JavaScript> '.
 
+ cols                   integer   the number of cols, this value is only 
+                                  used by the command completion to format
+                                  the list of results.
+
  commandValidate        function  When user hits return, validate
                                   whether to trigger commandHandle and
                                   re-prompt.
@@ -29,6 +33,10 @@ Options available:
                                   called. Report function is for you
                                   to report a result of the command
                                   asynchronously.
+
+ commandComplete        function  Handle the command completion when the
+                                  tab key is pressed. It returns a list
+                                  of string completion suffixes.
 
  animateScroll          bool      Whether to animate the scroll to
                                   top. Currently disabled.
