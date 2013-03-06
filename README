@@ -1,6 +1,6 @@
 INTRODUCTION
 
-See demo.html. Or here: http://chrisdone.com/jquery-console/demo.html
+See demo.html. Or here: http://chrisdone.com/jquery-console/
 
 Options available:
 
@@ -18,7 +18,7 @@ Options available:
 
  promptLabel            string    Prompt string like 'JavaScript> '.
 
- cols                   integer   the number of cols, this value is only 
+ cols                   integer   the number of cols, this value is only
                                   used by the command completion to format
                                   the list of results.
 
@@ -76,5 +76,3 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
 LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
 ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
-
-
