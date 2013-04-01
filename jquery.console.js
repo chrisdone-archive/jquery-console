@@ -223,7 +223,11 @@
         container.click(function(){
             inner.addClass('jquery-console-focus');
             inner.removeClass('jquery-console-nofocus');
-            typer.focus();
+            if ($.browser.webkit) {
+                typer.focusWithoutScrolling();
+            } else {
+                typer.css('position', 'fixed').focus();
+            }
             scrollToBottom();
             return false;
         });
@@ -681,5 +685,12 @@
         $(this).text(txt);
         $(this).html($(this).html().replace(/\n/g,'<br/>'));
         return this;
+    };
+
+    // Alternative method for focus without scrolling
+    $.fn.focusWithoutScrolling = function(){
+        var x = window.scrollX, y = window.scrollY;
+        $(this).focus();
+        window.scrollTo(x, y);
     };
 })(jQuery);
