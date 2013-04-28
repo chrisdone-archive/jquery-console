@@ -38,6 +38,8 @@
 //   Google Chrome 5.0.375.55 (Mac)
 
 (function($){
+    var isWebkit = !!~navigator.userAgent.indexOf(' AppleWebKit/');
+
     $.fn.console = function(config){
         ////////////////////////////////////////////////////////////////////////
         // Constants
@@ -223,7 +225,7 @@
         container.click(function(){
             inner.addClass('jquery-console-focus');
             inner.removeClass('jquery-console-nofocus');
-            if ($.browser.webkit) {
+            if (isWebkit) {
                 typer.focusWithoutScrolling();
             } else {
                 typer.css('position', 'fixed').focus();
@@ -301,7 +303,7 @@
                      config.charInsertTrigger(keyCode,promptText)))
                     typer.consoleInsert(keyCode);
             }
-            if ($.browser.webkit) return false;
+            if (isWebkit) return false;
         });
 
         function isIgnorableKey(e) {
