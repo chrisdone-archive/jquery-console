@@ -628,7 +628,7 @@
 	function doNothing() {};
 
         extern.promptText = function(text){
-            if (text) {
+            if (typeof text === 'string') {
                 promptText = text;
                 column = promptText.length;
                 updatePromptDisplay();
