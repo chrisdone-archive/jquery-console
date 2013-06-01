@@ -86,6 +86,9 @@
 			// C-k
 			75: deleteUntilEnd
 		};
+        if(config.ctrlCodes) {
+            $.extend(ctrlCodes, config.ctrlCodes);
+        }
 		var altCodes = {
 			// M-f
 			70: moveToNextWord,
