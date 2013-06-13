@@ -429,7 +429,12 @@
 
 		// Scroll to the bottom of the view
 		function scrollToBottom() {
-			if (jQuery.fn.jquery > "1.6") {
+			var version = jQuery.fn.jquery.split('.');
+			var major = parseInt(version[0]);
+			var minor = parseInt(version[1]);
+			
+			// check if we're using jquery > 1.6
+			if ((major == 1 && minor > 6) || major > 1) {
 				inner.prop({ scrollTop: inner.prop("scrollHeight") });
 			}
 			else {
