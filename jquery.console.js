@@ -116,6 +116,7 @@
 		var promptText = '';
 		var restoreText = '';
 		var continuedText = '';
+		var fadeOnReset = config.fadeOnReset !== undefined ? config.fadeOnReset : true;
 		// Prompt history stack
 		var history = [];
 		var ringn = 0;
@@ -161,20 +162,34 @@
 		// Reset terminal
 		extern.reset = function(){
 			var welcome = (typeof config.welcomeMessage != 'undefined');
-			inner.parent().fadeOut(function(){
+
+			var removeElements = function() {
 				inner.find('div').each(function(){
 					if (!welcome) {
 						$(this).remove();
-			} else {
-			welcome = false;
+					} else {
+						welcome = false;
+					}
+				});
+			};
+
+			var focusConsole = function() {
+				inner.addClass('jquery-console-focus');
+				typer.focus();
+			};
+
+			if (fadeOnReset) {
+				inner.parent().fadeOut(function() {
+					removeElements();
+					newPromptBox();
+					inner.parent().fadeIn(focusConsole);
+				});
 			}
-				});
+			else {
+				removeElements();
 				newPromptBox();
-				inner.parent().fadeIn(function(){
-					inner.addClass('jquery-console-focus');
-					typer.focus();
-				});
-			});
+				focusConsole();
+			}
 		};
 
 		////////////////////////////////////////////////////////////////////////

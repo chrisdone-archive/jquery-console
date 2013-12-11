@@ -47,6 +47,9 @@ Options available:
 
  cancelHandle           function  Handle a user-signaled interrupt.
 
+ fadeOnReset            bool      Whether to trigger a fade in/out when
+                                  the console is reset.  Defaults to true.
+
 LICENSE
 
 Copyright 2010 Chris Done, Simon David Pratt. All rights reserved.
