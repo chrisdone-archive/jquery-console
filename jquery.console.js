@@ -100,8 +100,6 @@
 		var shiftCodes = {
 			// return
 			13: newLine,
-			// C-a
-			65: newLine,
 		};
 		var cursor = '<span class="jquery-console-cursor">&nbsp;</span>';
 
