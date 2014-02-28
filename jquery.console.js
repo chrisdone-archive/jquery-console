@@ -57,7 +57,7 @@
 			8:  backDelete,
 			// delete
 			46: forwardDelete,
-				// end
+			// end
 			35: moveToEnd,
 			// start
 			36: moveToStart,
@@ -96,6 +96,12 @@
 			66: moveToPreviousWord,
 			// M-d
 			68: deleteNextWord
+		};
+		var shiftCodes = {
+			// return
+			13: newLine,
+			// C-a
+			65: newLine,
 		};
 		var cursor = '<span class="jquery-console-cursor">&nbsp;</span>';
 
@@ -292,17 +298,21 @@
 				return false;
 			}
 			if (acceptInput) {
-				if (keyCode in keyCodes) {
+				if (e.shiftKey && keyCode in shiftCodes) {
 					cancelKeyPress = keyCode;
-					(keyCodes[keyCode])();
+					(shiftCodes[keyCode])();
+					return false;
+				} else if (e.altKey  && keyCode in altCodes) {
+					cancelKeyPress = keyCode;
+					(altCodes[keyCode])();
 					return false;
 				} else if (e.ctrlKey && keyCode in ctrlCodes) {
 					cancelKeyPress = keyCode;
 					(ctrlCodes[keyCode])();
 					return false;
-				} else if (e.altKey  && keyCode in altCodes) {
+				} else if (keyCode in keyCodes) {
 					cancelKeyPress = keyCode;
-					(altCodes[keyCode])();
+					(keyCodes[keyCode])();
 					return false;
 				}
 			}
@@ -427,6 +437,12 @@
 				deleteCharAtPos();
 				updatePromptDisplay();
 			}
+		};
+		
+		function newLine() {
+			promptText += "\n";
+			moveColumn(1);
+			updatePromptDisplay();
 		};
 
 		////////////////////////////////////////////////////////////////////////
