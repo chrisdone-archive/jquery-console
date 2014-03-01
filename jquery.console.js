@@ -436,10 +436,14 @@
 				updatePromptDisplay();
 			}
 		};
-		
+
 		function newLine() {
-			promptText += "\n";
-			moveColumn(1);
+			lines = promptText.split("\n");
+			last_line = lines.slice(-1)[0];
+			spaces = last_line.match(/^(\s*)/g)[0];
+			new_line = "\n" + spaces;
+			promptText += new_line;
+			moveColumn(new_line.length);
 			updatePromptDisplay();
 		};
 
@@ -466,7 +470,7 @@
 			var version = jQuery.fn.jquery.split('.');
 			var major = parseInt(version[0]);
 			var minor = parseInt(version[1]);
-			
+
 			// check if we're using jquery > 1.6
 			if ((major == 1 && minor > 6) || major > 1) {
 				inner.prop({ scrollTop: inner.prop("scrollHeight") });
