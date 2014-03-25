@@ -34,7 +34,7 @@ Options available:
                                   to report a result of the command
                                   asynchronously.
 
- commandComplete        function  Handle the command completion when the
+ completeHandle         function  Handle the command completion when the
                                   tab key is pressed. It returns a list
                                   of string completion suffixes.
 
