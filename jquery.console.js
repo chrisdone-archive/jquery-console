@@ -438,8 +438,12 @@
     };
 
     function newLine() {
-      promptText += "\n";
-      moveColumn(1);
+      var lines = promptText.split("\n");
+      var last_line = lines.slice(-1)[0];
+      var spaces = last_line.match(/^(\s*)/g)[0];
+      var new_line = "\n" + spaces;
+      promptText += new_line;
+      moveColumn(new_line.length);
       updatePromptDisplay();
     };
 
