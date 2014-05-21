@@ -565,7 +565,7 @@
 		// numeric value of a single character, or a string
 		typer.consoleInsert = function(data){
 			// TODO: remove redundant indirection
-			var text = isNaN(data) ? data : String.fromCharCode(data);
+			var text = (typeof data == 'number') ? String.fromCharCode(data) : data;
 			var before = promptText.substring(0,column);
 			var after = promptText.substring(column);
 			promptText = before + text + after;
