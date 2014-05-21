@@ -3,6 +3,10 @@
 A terminal emulator for making command consoles written in JavaScript
 with jQuery.
 
+See
+[LICENSE](https://github.com/chrisdone/jquery-console/blob/master/LICENSE)
+for the license.
+
 ## Example
 
 For a list of examples, see
@@ -80,3 +84,12 @@ Here are options which can be passed to `console`:
 | charInsertTrigger     | function | Predicate for whether to allow character insertion. `charInsertTrigger(char,line)` is called.
 | cancelHandle          | function | Handle a user-signaled interrupt.
 | fadeOnReset           | bool     | Whether to trigger a fade in/out when the console is reset.  Defaults to `true`.
+
+## Uses in the wild
+
+* [Try Haskell](http://tryhaskell.org/)
+* [Try Idris](http://www.tryidris.org/console)
+* [Caja](http://code.google.com/p/google-caja/)
+* [Try Clojure](http://tryclj.com/)
+* [Try Arc](http://tryarc.org/)
+* [Try Github](http://try.github.io/) (was, now uses [CodeMirror](http://codemirror.net/))
