@@ -177,11 +177,6 @@
 	});
       };
 
-      var focusConsole = function() {
-	inner.addClass('jquery-console-focus');
-	typer.focus();
-      };
-
       if (fadeOnReset) {
 	inner.parent().fadeOut(function() {
 	  removeElements();
@@ -195,6 +190,15 @@
 	focusConsole();
       }
     };
+
+    var focusConsole = function() {
+      inner.addClass('jquery-console-focus');
+      typer.focus();
+    };
+
+    extern.focus = function(){
+      focusConsole();
+    }
 
     ////////////////////////////////////////////////////////////////////////
     // Reset terminal
