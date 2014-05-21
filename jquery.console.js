@@ -113,7 +113,6 @@
     // Prompt
     var promptBox;
     var prompt;
-    var promptLabel = config && config.promptLabel? config.promptLabel : "> ";
     var continuedPromptLabel = config && config.continuedPromptLabel?
       config.continuedPromptLabel : "> ";
     var column = 0;
@@ -143,6 +142,7 @@
     ////////////////////////////////////////////////////////////////////////
     // Main entry point
     (function(){
+      extern.promptLabel = config && config.promptLabel? config.promptLabel : "> ";
       container.append(inner);
       inner.append(typer);
       typer.css({position:'absolute',top:0,left:'-9999px'});
@@ -233,7 +233,7 @@
       enableInput();
       promptBox = $('<div class="jquery-console-prompt-box"></div>');
       var label = $('<span class="jquery-console-prompt-label"></span>');
-      var labelText = extern.continuedPrompt? continuedPromptLabel : promptLabel;
+      var labelText = extern.continuedPrompt? continuedPromptLabel : extern.promptLabel;
       promptBox.append(label.text(labelText).show());
       label.html(label.html().replace(' ','&nbsp;'));
       prompt = $('<span class="jquery-console-prompt"></span>');
