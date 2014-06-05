@@ -128,7 +128,33 @@
             }
             return ret;
           }
-         })
+         });
+         /* Sixth console */
+         var console6 = $('<div class="console6">');
+         $('body').append(console6);
+         var controller6 = console6.console({
+           promptLabel: 'Periodic> ',
+           commandValidate:function(line){
+             if (line == "") return false;
+             else return true;
+           },
+           commandHandle:function(line){
+               return [{msg:"=> [12,42]",
+                        className:"jquery-console-message-value"},
+                       {msg:":: [a]",
+                        className:"jquery-console-message-type"}]
+           },
+           autofocus:true,
+           animateScroll:true,
+           promptHistory:true
+         });
+         var counter = 0;
+         setInterval(function() {
+             controller6.report([{msg:"The counter is at " + (counter++) + ".",
+                                  className:"jquery-console-message-value"},
+                                 {msg:(counter * 3) + " seconds have elapsed.",
+                                  className:"jquery-console-message-type"}]);
+         }, 3000);
        });
     </script>
     <style type="text/css" media="screen">
@@ -201,6 +227,25 @@
        { color:#187718; font-family:monospace;
          padding:0.1em; }
       div.console4 span.jquery-console-prompt-label { font-weight:bold }
+      /* Sixth console */
+      div.console6 { font-size: 14px }
+      div.console6 div.jquery-console-inner
+       { width:900px; height:200px; background:#333; padding:0.5em;
+         overflow:auto }
+      div.console6 div.jquery-console-prompt-box
+       { color:#fff; font-family:monospace; }
+      div.console6 div.jquery-console-focus span.jquery-console-cursor
+       { background:#fefefe; color:#333; font-weight:bold }
+      div.console6 div.jquery-console-message-error
+       { color:#ef0505; font-family:sans-serif; font-weight:bold;
+         padding:0.1em; }
+      div.console6 div.jquery-console-message-value
+       { color:#1ad027; font-family:monospace;
+         padding:0.1em; }
+      div.console6 div.jquery-console-message-type
+       { color:#52666f; font-family:monospace;
+         padding:0.1em; }
+      div.console6 span.jquery-console-prompt-label { font-weight:bold }
     </style>
   </head>
   <body>

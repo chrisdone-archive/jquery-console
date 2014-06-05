@@ -160,6 +160,7 @@
       extern.inner = inner;
       extern.typer = typer;
       extern.scrollToBottom = scrollToBottom;
+      extern.report = report;
     })();
 
     ////////////////////////////////////////////////////////////////////////
@@ -555,6 +556,15 @@
 	inner.append(msg);
       }
       newPromptBox();
+    };
+
+    ////////////////////////////////////////////////////////////////////////
+    // Report some message into the console
+    function report(msg,className) {
+      var text = promptText;
+      promptBox.remove();
+      commandResult(msg,className);
+      extern.promptText(text);
     };
 
     ////////////////////////////////////////////////////////////////////////
