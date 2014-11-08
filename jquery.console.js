@@ -147,15 +147,15 @@
       inner.append(typer);
       typer.css({position:'absolute',top:0,left:'-9999px'});
       if (config.welcomeMessage)
-	message(config.welcomeMessage,'jquery-console-welcome');
+        message(config.welcomeMessage,'jquery-console-welcome');
       newPromptBox();
       if (config.autofocus) {
-	inner.addClass('jquery-console-focus');
-	typer.focus();
-	setTimeout(function(){
-	  inner.addClass('jquery-console-focus');
-	  typer.focus();
-	},100);
+        inner.addClass('jquery-console-focus');
+        typer.focus();
+        setTimeout(function(){
+          inner.addClass('jquery-console-focus');
+          typer.focus();
+        },100);
       }
       extern.inner = inner;
       extern.typer = typer;
@@ -169,26 +169,26 @@
       var welcome = (typeof config.welcomeMessage != 'undefined');
 
       var removeElements = function() {
-	inner.find('div').each(function(){
-	  if (!welcome) {
-	    $(this).remove();
-	  } else {
-	    welcome = false;
-	  }
-	});
+        inner.find('div').each(function(){
+          if (!welcome) {
+            $(this).remove();
+          } else {
+            welcome = false;
+          }
+        });
       };
 
       if (fadeOnReset) {
-	inner.parent().fadeOut(function() {
-	  removeElements();
-	  newPromptBox();
-	  inner.parent().fadeIn(focusConsole);
-	});
+        inner.parent().fadeOut(function() {
+          removeElements();
+          newPromptBox();
+          inner.parent().fadeIn(focusConsole);
+        });
       }
       else {
-	removeElements();
-	newPromptBox();
-	focusConsole();
+        removeElements();
+        newPromptBox();
+        focusConsole();
       }
     };
 
@@ -205,26 +205,26 @@
     // Reset terminal
     extern.notice = function(msg,style){
       var n = $('<div class="notice"></div>').append($('<div></div>').text(msg))
-	.css({visibility:'hidden'});
+        .css({visibility:'hidden'});
       container.append(n);
       var focused = true;
       if (style=='fadeout')
-	setTimeout(function(){
-	  n.fadeOut(function(){
-	    n.remove();
-	  });
-	},4000);
+        setTimeout(function(){
+          n.fadeOut(function(){
+            n.remove();
+          });
+        },4000);
       else if (style=='prompt') {
-	var a = $('<br/><div class="action"><a href="javascript:">OK</a><div class="clear"></div></div>');
-	n.append(a);
-	focused = false;
-	a.click(function(){ n.fadeOut(function(){ n.remove();inner.css({opacity:1}) }); });
+        var a = $('<br/><div class="action"><a href="javascript:">OK</a><div class="clear"></div></div>');
+        n.append(a);
+        focused = false;
+        a.click(function(){ n.fadeOut(function(){ n.remove();inner.css({opacity:1}) }); });
       }
       var h = n.height();
       n.css({height:'0px',visibility:'visible'})
-	.animate({height:h+'px'},function(){
-	  if (!focused) inner.css({opacity:0.5});
-	});
+        .animate({height:h+'px'},function(){
+          if (!focused) inner.css({opacity:0.5});
+        });
       n.css('cursor','default');
       return n;
     };
@@ -252,15 +252,15 @@
     container.click(function(){
       // Don't mess with the focus if there is an active selection
       if (window.getSelection().toString()) {
-	return false;
+        return false;
       }
 
       inner.addClass('jquery-console-focus');
       inner.removeClass('jquery-console-nofocus');
       if (isWebkit) {
-	typer.focusWithoutScrolling();
+        typer.focusWithoutScrolling();
       } else {
-	typer.css('position', 'fixed').focus();
+        typer.css('position', 'fixed').focus();
       }
       scrollToBottom();
       return false;
@@ -282,8 +282,8 @@
       // this timeout is required because the onpaste event is
       // fired *before* the text is actually pasted
       setTimeout(function() {
-	typer.consoleInsert(typer.val());
-	typer.val("");
+        typer.consoleInsert(typer.val());
+        typer.val("");
       }, 0);
     });
 
@@ -296,28 +296,28 @@
       var keyCode = e.keyCode;
       // C-c: cancel the execution
       if(e.ctrlKey && keyCode == 67) {
-	cancelKeyPress = keyCode;
-	cancelExecution();
-	return false;
+        cancelKeyPress = keyCode;
+        cancelExecution();
+        return false;
       }
       if (acceptInput) {
-	if (e.shiftKey && keyCode in shiftCodes) {
-	  cancelKeyPress = keyCode;
-	  (shiftCodes[keyCode])();
-	  return false;
-	} else if (e.altKey  && keyCode in altCodes) {
-	  cancelKeyPress = keyCode;
-	  (altCodes[keyCode])();
-	  return false;
-	} else if (e.ctrlKey && keyCode in ctrlCodes) {
-	  cancelKeyPress = keyCode;
-	  (ctrlCodes[keyCode])();
-	  return false;
-	} else if (keyCode in keyCodes) {
-	  cancelKeyPress = keyCode;
-	  (keyCodes[keyCode])();
-	  return false;
-	}
+        if (e.shiftKey && keyCode in shiftCodes) {
+          cancelKeyPress = keyCode;
+          (shiftCodes[keyCode])();
+          return false;
+        } else if (e.altKey  && keyCode in altCodes) {
+          cancelKeyPress = keyCode;
+          (altCodes[keyCode])();
+          return false;
+        } else if (e.ctrlKey && keyCode in ctrlCodes) {
+          cancelKeyPress = keyCode;
+          (ctrlCodes[keyCode])();
+          return false;
+        } else if (keyCode in keyCodes) {
+          cancelKeyPress = keyCode;
+          (keyCodes[keyCode])();
+          return false;
+        }
       }
     });
 
@@ -326,22 +326,22 @@
     typer.keypress(function(e){
       var keyCode = e.keyCode || e.which;
       if (isIgnorableKey(e)) {
-	return false;
+        return false;
       }
       // C-v: don't insert on paste event
       if ((e.ctrlKey || e.metaKey) && String.fromCharCode(keyCode).toLowerCase() == 'v') {
-	return true;
+        return true;
       }
       if (acceptInput && cancelKeyPress != keyCode && keyCode >= 32){
-	if (cancelKeyPress) return false;
-	if (
-	  typeof config.charInsertTrigger == 'undefined' || (
-	    typeof config.charInsertTrigger == 'function' &&
-	      config.charInsertTrigger(keyCode,promptText)
-	  )
-	){
-	  typer.consoleInsert(keyCode);
-	}
+        if (cancelKeyPress) return false;
+        if (
+          typeof config.charInsertTrigger == 'undefined' || (
+            typeof config.charInsertTrigger == 'function' &&
+              config.charInsertTrigger(keyCode,promptText)
+          )
+        ){
+          typer.consoleInsert(keyCode);
+        }
       }
       if (isWebkit) return false;
     });
@@ -361,18 +361,18 @@
       else if (ringn > history.length) ringn = 0;
       var prevText = promptText;
       if (ringn == 0) {
-	promptText = restoreText;
+        promptText = restoreText;
       } else {
-	promptText = history[ringn - 1];
+        promptText = history[ringn - 1];
       }
       if (config.historyPreserveColumn) {
-	if (promptText.length < column + 1) {
-	  column = promptText.length;
-	} else if (column == 0) {
-	  column = promptText.length;
-	}
+        if (promptText.length < column + 1) {
+          column = promptText.length;
+        } else if (column == 0) {
+          column = promptText.length;
+        }
       } else {
-	column = promptText.length;
+        column = promptText.length;
       }
       updatePromptDisplay();
     };
@@ -394,30 +394,30 @@
     // Delete the character at the current position
     function deleteCharAtPos(){
       if (column < promptText.length){
-	promptText =
-	  promptText.substring(0,column) +
-	  promptText.substring(column+1);
-	restoreText = promptText;
-	return true;
+        promptText =
+          promptText.substring(0,column) +
+          promptText.substring(column+1);
+        restoreText = promptText;
+        return true;
       } else return false;
     };
 
     function backDelete() {
       if (moveColumn(-1)){
-	deleteCharAtPos();
-	updatePromptDisplay();
+        deleteCharAtPos();
+        updatePromptDisplay();
       }
     };
 
     function forwardDelete() {
       if (deleteCharAtPos()){
-	updatePromptDisplay();
+        updatePromptDisplay();
       }
     };
 
     function deleteUntilEnd() {
       while(deleteCharAtPos()) {
-	updatePromptDisplay();
+        updatePromptDisplay();
       }
     };
 
@@ -426,19 +426,19 @@
       // characters.
       // Delete up to the next alphanumeric character
       while(
-	column < promptText.length &&
-	  !isCharAlphanumeric(promptText[column])
+        column < promptText.length &&
+          !isCharAlphanumeric(promptText[column])
       ) {
-	deleteCharAtPos();
-	updatePromptDisplay();
+        deleteCharAtPos();
+        updatePromptDisplay();
       }
       // Then, delete until the next non-alphanumeric character
       while(
-	column < promptText.length &&
-	  isCharAlphanumeric(promptText[column])
+        column < promptText.length &&
+          isCharAlphanumeric(promptText[column])
       ) {
-	deleteCharAtPos();
-	updatePromptDisplay();
+        deleteCharAtPos();
+        updatePromptDisplay();
       }
     };
 
@@ -457,16 +457,16 @@
     function commandTrigger() {
       var line = promptText;
       if (typeof config.commandValidate == 'function') {
-	var ret = config.commandValidate(line);
-	if (ret == true || ret == false) {
-	  if (ret) {
-	    handleCommand();
-	  }
-	} else {
-	  commandResult(ret,"jquery-console-message-error");
-	}
+        var ret = config.commandValidate(line);
+        if (ret == true || ret == false) {
+          if (ret) {
+            handleCommand();
+          }
+        } else {
+          commandResult(ret,"jquery-console-message-error");
+        }
       } else {
-	handleCommand();
+        handleCommand();
       }
     };
 
@@ -478,16 +478,16 @@
 
       // check if we're using jquery > 1.6
       if ((major == 1 && minor > 6) || major > 1) {
-	inner.prop({ scrollTop: inner.prop("scrollHeight") });
+        inner.prop({ scrollTop: inner.prop("scrollHeight") });
       }
       else {
-	inner.attr({ scrollTop: inner.attr("scrollHeight") });
+        inner.attr({ scrollTop: inner.attr("scrollHeight") });
       }
     };
 
     function cancelExecution() {
       if(typeof config.cancelHandle == 'function') {
-	config.cancelHandle();
+        config.cancelHandle();
       }
     }
 
@@ -495,37 +495,37 @@
     // Handle a command
     function handleCommand() {
       if (typeof config.commandHandle == 'function') {
-	disableInput();
-	addToHistory(promptText);
-	var text = promptText;
-	if (extern.continuedPrompt) {
-	  if (continuedText)
-	    continuedText += '\n' + promptText;
-	  else continuedText = promptText;
-	} else continuedText = undefined;
-	if (continuedText) text = continuedText;
-	var ret = config.commandHandle(text,function(msgs){
-	  commandResult(msgs);
-	});
-	if (extern.continuedPrompt && !continuedText)
-	  continuedText = promptText;
-	if (typeof ret == 'boolean') {
-	  if (ret) {
-	    // Command succeeded without a result.
-	    commandResult();
-	  } else {
-	    commandResult(
-	      'Command failed.',
-	      "jquery-console-message-error"
-	    );
-	  }
-	} else if (typeof ret == "string") {
-	  commandResult(ret,"jquery-console-message-success");
-	} else if (typeof ret == 'object' && ret.length) {
-	  commandResult(ret);
-	} else if (extern.continuedPrompt) {
-	  commandResult();
-	}
+        disableInput();
+        addToHistory(promptText);
+        var text = promptText;
+        if (extern.continuedPrompt) {
+          if (continuedText)
+            continuedText += '\n' + promptText;
+          else continuedText = promptText;
+        } else continuedText = undefined;
+        if (continuedText) text = continuedText;
+        var ret = config.commandHandle(text,function(msgs){
+          commandResult(msgs);
+        });
+        if (extern.continuedPrompt && !continuedText)
+          continuedText = promptText;
+        if (typeof ret == 'boolean') {
+          if (ret) {
+            // Command succeeded without a result.
+            commandResult();
+          } else {
+            commandResult(
+              'Command failed.',
+              "jquery-console-message-error"
+            );
+          }
+        } else if (typeof ret == "string") {
+          commandResult(ret,"jquery-console-message-success");
+        } else if (typeof ret == 'object' && ret.length) {
+          commandResult(ret);
+        } else if (extern.continuedPrompt) {
+          commandResult();
+        }
       }
     };
 
@@ -546,14 +546,14 @@
       column = -1;
       updatePromptDisplay();
       if (typeof msg == 'string') {
-	message(msg,className);
+        message(msg,className);
       } else if ($.isArray(msg)) {
-	for (var x in msg) {
-	  var ret = msg[x];
-	  message(ret.msg,ret.className);
-	}
+        for (var x in msg) {
+          var ret = msg[x];
+          message(ret.msg,ret.className);
+        }
       } else { // Assume it's a DOM node or jQuery object.
-	inner.append(msg);
+        inner.append(msg);
       }
       newPromptBox();
     };
@@ -597,106 +597,106 @@
     // Negative means go back, positive means go forward.
     function moveColumn(n){
       if (column + n >= 0 && column + n <= promptText.length){
-	column += n;
-	return true;
+        column += n;
+        return true;
       } else return false;
     };
 
     function moveForward() {
       if(moveColumn(1)) {
-	updatePromptDisplay();
-	return true;
+        updatePromptDisplay();
+        return true;
       }
       return false;
     };
 
     function moveBackward() {
       if(moveColumn(-1)) {
-	updatePromptDisplay();
-	return true;
+        updatePromptDisplay();
+        return true;
       }
       return false;
     };
 
     function moveToStart() {
       if (moveColumn(-column))
-	updatePromptDisplay();
+        updatePromptDisplay();
     };
 
     function moveToEnd() {
       if (moveColumn(promptText.length-column))
-	updatePromptDisplay();
+        updatePromptDisplay();
     };
 
     function moveToNextWord() {
       while(
-	column < promptText.length &&
-	  !isCharAlphanumeric(promptText[column]) &&
-	  moveForward()
+        column < promptText.length &&
+          !isCharAlphanumeric(promptText[column]) &&
+          moveForward()
       ) {}
       while(
-	column < promptText.length &&
-	  isCharAlphanumeric(promptText[column]) &&
-	  moveForward()
+        column < promptText.length &&
+          isCharAlphanumeric(promptText[column]) &&
+          moveForward()
       ) {}
     };
 
     function moveToPreviousWord() {
       // Move backward until we find the first alphanumeric
       while(
-	column -1 >= 0 &&
-	  !isCharAlphanumeric(promptText[column-1]) &&
-	  moveBackward()
+        column -1 >= 0 &&
+          !isCharAlphanumeric(promptText[column-1]) &&
+          moveBackward()
       ) {}
       // Move until we find the first non-alphanumeric
       while(
-	column -1 >= 0 &&
-	  isCharAlphanumeric(promptText[column-1]) &&
-	  moveBackward()
+        column -1 >= 0 &&
+          isCharAlphanumeric(promptText[column-1]) &&
+          moveBackward()
       ) {}
     };
 
     function isCharAlphanumeric(charToTest) {
       if(typeof charToTest == 'string') {
-	var code = charToTest.charCodeAt();
-	return (code >= 'A'.charCodeAt() && code <= 'Z'.charCodeAt()) ||
-	  (code >= 'a'.charCodeAt() && code <= 'z'.charCodeAt()) ||
-	  (code >= '0'.charCodeAt() && code <= '9'.charCodeAt());
+        var code = charToTest.charCodeAt();
+        return (code >= 'A'.charCodeAt() && code <= 'Z'.charCodeAt()) ||
+          (code >= 'a'.charCodeAt() && code <= 'z'.charCodeAt()) ||
+          (code >= '0'.charCodeAt() && code <= '9'.charCodeAt());
       }
       return false;
     };
 
     function doComplete() {
       if(typeof config.completeHandle == 'function') {
-	var completions = config.completeHandle(promptText);
-	var len = completions.length;
-	if (len === 1) {
-	  extern.promptText(promptText + completions[0]);
-	} else if (len > 1 && config.cols) {
-	  var prompt = promptText;
-	  // Compute the number of rows that will fit in the width
-	  var max = 0;
-	  for (var i = 0;i < len;i++) {
-	    max = Math.max(max, completions[i].length);
-	  }
-	  max += 2;
-	  var n = Math.floor(config.cols / max);
-	  var buffer = "";
-	  var col = 0;
-	  for (i = 0;i < len;i++) {
-	    var completion = completions[i];
-	    buffer += completions[i];
-	    for (var j = completion.length;j < max;j++) {
-	      buffer += " ";
-	    }
-	    if (++col >= n) {
-	      buffer += "\n";
-	      col = 0;
-	    }
-	  }
-	  commandResult(buffer,"jquery-console-message-value");
-	  extern.promptText(prompt);
-	}
+        var completions = config.completeHandle(promptText);
+        var len = completions.length;
+        if (len === 1) {
+          extern.promptText(promptText + completions[0]);
+        } else if (len > 1 && config.cols) {
+          var prompt = promptText;
+          // Compute the number of rows that will fit in the width
+          var max = 0;
+          for (var i = 0;i < len;i++) {
+            max = Math.max(max, completions[i].length);
+          }
+          max += 2;
+          var n = Math.floor(config.cols / max);
+          var buffer = "";
+          var col = 0;
+          for (i = 0;i < len;i++) {
+            var completion = completions[i];
+            buffer += completions[i];
+            for (var j = completion.length;j < max;j++) {
+              buffer += " ";
+            }
+            if (++col >= n) {
+              buffer += "\n";
+              col = 0;
+            }
+          }
+          commandResult(buffer,"jquery-console-message-value");
+          extern.promptText(prompt);
+        }
       }
     };
 
@@ -704,9 +704,9 @@
 
     extern.promptText = function(text){
       if (typeof text === 'string') {
-	promptText = text;
-	column = promptText.length;
-	updatePromptDisplay();
+        promptText = text;
+        column = promptText.length;
+        updatePromptDisplay();
       }
       return promptText;
     };
@@ -717,25 +717,25 @@
       var line = promptText;
       var html = '';
       if (column > 0 && line == ''){
-	// When we have an empty line just display a cursor.
-	html = cursor;
+        // When we have an empty line just display a cursor.
+        html = cursor;
       } else if (column == promptText.length){
-	// We're at the end of the line, so we need to display
-	// the text *and* cursor.
-	html = htmlEncode(line) + cursor;
+        // We're at the end of the line, so we need to display
+        // the text *and* cursor.
+        html = htmlEncode(line) + cursor;
       } else {
-	// Grab the current character, if there is one, and
-	// make it the current cursor.
-	var before = line.substring(0, column);
-	var current = line.substring(column,column+1);
-	if (current){
-	  current =
-	    '<span class="jquery-console-cursor">' +
-	    htmlEncode(current) +
-	    '</span>';
-	}
-	var after = line.substring(column+1);
-	html = htmlEncode(before) + current + htmlEncode(after);
+        // Grab the current character, if there is one, and
+        // make it the current cursor.
+        var before = line.substring(0, column);
+        var current = line.substring(column,column+1);
+        if (current){
+          current =
+            '<span class="jquery-console-cursor">' +
+            htmlEncode(current) +
+            '</span>';
+        }
+        var after = line.substring(column+1);
+        html = htmlEncode(before) + current + htmlEncode(after);
       }
       prompt.html(html);
       scrollToBottom();
@@ -747,11 +747,11 @@
     // HTML encoder.
     function htmlEncode(text){
       return (
-	text.replace(/&/g,'&amp;')
-	  .replace(/</g,'&lt;')
-	  .replace(/</g,'&lt;')
-	  .replace(/ /g,'&nbsp;')
-	  .replace(/\n/g,'<br />')
+        text.replace(/&/g,'&amp;')
+          .replace(/</g,'&lt;')
+          .replace(/</g,'&lt;')
+          .replace(/ /g,'&nbsp;')
+          .replace(/\n/g,'<br />')
       );
     };
 
