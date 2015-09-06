@@ -84,7 +84,9 @@
       // C-f
       70: moveForward,
       // C-k
-      75: deleteUntilEnd
+      75: deleteUntilEnd,
+      // C-u
+      85 : clearCurrentPrompt
     };
     if(config.ctrlCodes) {
       $.extend(ctrlCodes, config.ctrlCodes);
@@ -419,6 +421,10 @@
       while(deleteCharAtPos()) {
 	updatePromptDisplay();
       }
+    };
+    
+    function clearCurrentPrompt() {
+    	extern.promptText("");
     };
 
     function deleteNextWord() {
