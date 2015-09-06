@@ -80,6 +80,7 @@ Here are options which can be passed to `console`:
 | commandValidate       | function | When user hits return, validate whether to trigger commandHandle and re-prompt.
 | commandHandle         | function | Handle the command line, return a string, boolean, or list of `{msg:"foo",className:"my-css-class"}`. `commandHandle(line,report)` is called. Report function is for you to report a result of the command asynchronously.
 | completeHandle        | function | Handle the command completion when the tab key is pressed. It returns a list of string completion suffixes.
+| completeIssuer        | function | Handle the command completion when the tab key is pressed. It differs from `'completeHandle'`. `'completeIssuer'` will just trigger the calculation for completion, and the result is returned asynchronously, after which the controller's `'showCompletion(promptText, completions)'` can be invoked with the result. `'completeHandle'` will retrieve the result synchronously, and show the result. If `'completeHandle'` exists, `'completeIssuer'` is ignored. A typical usage of `'completeIssuer'` is that the completion is retrieved from the server using ajax or WebSocket asynchronously. 
 | animateScroll         | bool     | Whether to animate the scroll to top. Currently disabled.
 | charInsertTrigger     | function | Predicate for whether to allow character insertion. `charInsertTrigger(char,line)` is called.
 | cancelHandle          | function | Handle a user-signaled interrupt.

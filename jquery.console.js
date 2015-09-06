@@ -163,6 +163,7 @@
       extern.typer = typer;
       extern.scrollToBottom = scrollToBottom;
       extern.report = report;
+      extern.showCompletion = showCompletion;
     })();
 
     ////////////////////////////////////////////////////////////////////////
@@ -673,6 +674,14 @@
     };
 
     function doComplete() {
+    	if(typeof config.completeHandle == 'function') {
+    		doCompleteDirectly();
+    	} else {
+    		issueComplete();
+    	}
+    };
+    
+    function doCompleteDirectly() {
       if(typeof config.completeHandle == 'function') {
 	var completions = config.completeHandle(promptText);
 	var len = completions.length;
@@ -705,6 +714,44 @@
 	}
       }
     };
+    
+	function issueComplete() {
+		if (typeof config.completeIssuer == 'function') {
+			config.completeIssuer(promptText);
+		}
+	};
+	
+	function showCompletion(promptText, completions) {
+
+		var len = completions.length;
+		if (len === 1) {
+			extern.promptText(promptText + completions[0]);
+		} else if (len > 1 && config.cols) {
+			var prompt = promptText;
+			// Compute the number of rows that will fit in the width
+			var max = 0;
+			for (var i = 0; i < len; i++) {
+				max = Math.max(max, completions[i].length);
+			}
+			max += 2;
+			var n = Math.floor(config.cols / max);
+			var buffer = "";
+			var col = 0;
+			for (i = 0; i < len; i++) {
+				var completion = completions[i];
+				buffer += completions[i];
+				for (var j = completion.length; j < max; j++) {
+					buffer += " ";
+				}
+				if (++col >= n) {
+					buffer += "\n";
+					col = 0;
+				}
+			}
+			commandResult(buffer, "jquery-console-message-value");
+			extern.promptText(prompt);
+		}
+	};
 
     function doNothing() {};
 
