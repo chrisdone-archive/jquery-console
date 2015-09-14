@@ -85,8 +85,10 @@
       70: moveForward,
       // C-k
       75: deleteUntilEnd,
+      // C-l
+      76: clearScreen,
       // C-u
-      85 : clearCurrentPrompt
+      85: clearCurrentPrompt
     };
     if(config.ctrlCodes) {
       $.extend(ctrlCodes, config.ctrlCodes);
@@ -164,6 +166,7 @@
       extern.scrollToBottom = scrollToBottom;
       extern.report = report;
       extern.showCompletion = showCompletion;
+      extern.clearScreen = clearScreen;
     })();
 
     ////////////////////////////////////////////////////////////////////////
@@ -426,6 +429,13 @@
     
     function clearCurrentPrompt() {
     	extern.promptText("");
+    };
+    
+    function clearScreen() {
+    	inner.children(".jquery-console-prompt-box, .jquery-console-message").remove();
+    	extern.report(" ");
+    	extern.promptText("");
+    	extern.focus();
     };
 
     function deleteNextWord() {
