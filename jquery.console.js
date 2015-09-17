@@ -426,11 +426,11 @@
 	updatePromptDisplay();
       }
     };
-    
+
     function clearCurrentPrompt() {
     	extern.promptText("");
     };
-    
+
     function clearScreen() {
     	inner.children(".jquery-console-prompt-box, .jquery-console-message").remove();
     	extern.report(" ");
@@ -690,7 +690,7 @@
     		issueComplete();
     	}
     };
-    
+
     function doCompleteDirectly() {
       if(typeof config.completeHandle == 'function') {
 	var completions = config.completeHandle(promptText);
@@ -724,13 +724,13 @@
 	}
       }
     };
-    
+
 	function issueComplete() {
 		if (typeof config.completeIssuer == 'function') {
 			config.completeIssuer(promptText);
 		}
 	};
-	
+
 	function showCompletion(promptText, completions) {
 
 		var len = completions.length;
@@ -823,7 +823,7 @@
   // Simple utility for printing messages
   $.fn.filledText = function(txt){
     $(this).text(txt);
-    $(this).html($(this).html().replace(/\n/g,'<br/>'));
+    $(this).html($(this).html().replace(/\t/g, '&nbsp;&nbsp;').replace(/\n/g,'<br/>'));
     return this;
   };
 
