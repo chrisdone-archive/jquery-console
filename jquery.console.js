@@ -428,14 +428,16 @@
     };
 
     function clearCurrentPrompt() {
-    	extern.promptText("");
+      extern.promptText("");
     };
 
     function clearScreen() {
-    	inner.children(".jquery-console-prompt-box, .jquery-console-message").remove();
-    	extern.report(" ");
-    	extern.promptText("");
-    	extern.focus();
+      inner.children(".jquery-console-prompt-box, .jquery-console-message").remove();
+      if (config.welcomeMessage)  
+        message(config.welcomeMessage,'jquery-console-welcome');
+      extern.report(" ");
+      extern.promptText("");
+      extern.focus();
     };
 
     function deleteNextWord() {
