@@ -93,4 +93,4 @@ Here are options which can be passed to `console`:
 * [Caja](http://code.google.com/p/google-caja/)
 * [Try Clojure](http://tryclj.com/)
 * [Try Arc](http://tryarc.org/)
-* [Try Github](http://try.github.io/) (was, now uses [CodeMirror](http://codemirror.net/))
+* [Try Git](http://try.github.io/) (was, now uses [CodeMirror](http://codemirror.net/))
