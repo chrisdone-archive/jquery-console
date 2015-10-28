@@ -103,7 +103,7 @@
     };
     var shiftCodes = {
       // return
-      13: newLine,
+      13: newLine
     };
     var cursor = '<span class="jquery-console-cursor">&nbsp;</span>';
 
