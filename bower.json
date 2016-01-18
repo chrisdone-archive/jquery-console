@@ -1,0 +1,12 @@
+{
+  "name": "jquery-console",
+  "homepage": "https://github.com/chrisdone/jquery-console",
+  "authors": [
+    "Chris Done <chrisdone@gmail.com>"
+  ],
+  "description": "A simple JQuery console emulator",
+  "main": "jquery.console.js",
+  "ignore": [
+    "demo.html"
+  ]
+}
