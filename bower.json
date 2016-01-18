@@ -6,6 +6,7 @@
   ],
   "description": "A simple JQuery console emulator",
   "main": "jquery.console.js",
+  "license": "LICENSE",
   "ignore": [
     "demo.html"
   ]
