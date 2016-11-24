@@ -68,6 +68,11 @@
       // tab
       9: doComplete
     };
+
+    if(config.keyCodes) {
+      $.extend(keyCodes, config.keyCodes);
+    }
+    
     var ctrlCodes = {
       // C-a
       65: moveToStart,
