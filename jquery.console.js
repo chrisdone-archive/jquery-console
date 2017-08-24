@@ -811,7 +811,7 @@
       return (
         text.replace(/&/g,'&amp;')
           .replace(/</g,'&lt;')
-          .replace(/</g,'&lt;')
+          .replace(/>/g,'&gt;')
           .replace(/ /g,'&nbsp;')
           .replace(/\n/g,'<br />')
       );
