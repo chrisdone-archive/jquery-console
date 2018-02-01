@@ -125,7 +125,7 @@
     var continuedText = '';
     var fadeOnReset = config.fadeOnReset !== undefined ? config.fadeOnReset : true;
     // Prompt history stack
-    var history = [];
+    var commandHistory = [];
     var ringn = 0;
     // For reasons unknown to The Sword of Michael himself, Opera
     // triggers and sends a key character when you hit various
@@ -143,6 +143,42 @@
     // External exports object
     var extern = {};
 
+	//Object returned on history.get(nFromLast) to allow limited modification of a previous entry.
+	function MessageHandle(mesg){
+		this.setText=function(msg){
+			mesg.filledText(msg);
+		};
+	}
+	  //History of mesg added to the console.
+	var history = new (function(){
+		var self = this;
+		var list = [];
+		this.add = function(mesg){
+			list.push(mesg);
+		};
+		this.clear=function(){
+			list=[];
+		};
+		this.get=function(nFromLast)//nFromLast is indices from last mesg added.
+		{
+			if(list.length<=0)
+				return;
+			if(nFromLast==undefined)
+				var index=0;
+			else{
+				if(nFromLast<0)
+					nFromLast=0;
+				var index=list.length-(1+nFromLast);
+				if(index<0)
+					index=0;
+			}
+			return new MessageHandle(list[index]);
+		};
+		this.getExternMethods=function(){
+			  return {get:self.get};
+		};
+	})();
+  
     ////////////////////////////////////////////////////////////////////////
     // Main entry point
     (function(){
@@ -167,6 +203,7 @@
       extern.report = report;
       extern.showCompletion = showCompletion;
       extern.clearScreen = clearScreen;
+	  extern.history = history.getExternMethods();
     })();
 
     ////////////////////////////////////////////////////////////////////////
@@ -361,15 +398,15 @@
     ////////////////////////////////////////////////////////////////////////
     // Rotate through the command history
     function rotateHistory(n){
-      if (history.length == 0) return;
+      if (commandHistory.length == 0) return;
       ringn += n;
-      if (ringn < 0) ringn = history.length;
-      else if (ringn > history.length) ringn = 0;
+      if (ringn < 0) ringn = commandHistory.length;
+      else if (ringn > commandHistory.length) ringn = 0;
       var prevText = promptText;
       if (ringn == 0) {
         promptText = restoreText;
       } else {
-        promptText = history[ringn - 1];
+        promptText = commandHistory[ringn - 1];
       }
       if (config.historyPreserveColumn) {
         if (promptText.length < column + 1) {
@@ -393,7 +430,7 @@
 
     // Add something to the history ring
     function addToHistory(line){
-      history.push(line);
+      commandHistory.push(line);
       restoreText = '';
     };
 
@@ -435,6 +472,7 @@
         inner.children(".jquery-console-prompt-box, .jquery-console-message").slice(0, -1).remove();
         extern.report(" ");
         extern.focus();
+		history.clear();
     };
 
     function deleteNextWord() {
@@ -590,6 +628,7 @@
       if (className) mesg.addClass(className);
       mesg.filledText(msg).hide();
       inner.append(mesg);
+	  history.add(mesg);
       mesg.show();
     };
 
@@ -832,4 +871,5 @@
     $(this).focus();
     window.scrollTo(x, y);
   };
+  
 })(jQuery);
