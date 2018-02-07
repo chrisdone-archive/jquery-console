@@ -299,7 +299,7 @@
 
     typer.keydown(function(e){
       cancelKeyPress = 0;
-      var keyCode = e.keyCode;
+      var keyCode = e.which || e.code;
       // C-c: cancel the execution
       if(e.ctrlKey && keyCode == 67) {
         cancelKeyPress = keyCode;
@@ -325,12 +325,6 @@
           return false;
         }
       }
-    });
-
-    ////////////////////////////////////////////////////////////////////////
-    // Handle key press
-    typer.keypress(function(e){
-      var keyCode = e.keyCode || e.which;
       if (isIgnorableKey(e)) {
         return false;
       }
@@ -342,14 +336,20 @@
         if (cancelKeyPress) return false;
         if (
           typeof config.charInsertTrigger == 'undefined' || (
-            typeof config.charInsertTrigger == 'function' &&
+            typeof config.charInsertTrigger == 'faunction' &&
               config.charInsertTrigger(keyCode,promptText)
           )
         ){
-          typer.consoleInsert(keyCode);
+          let currentKey = e.key;
+            if (!currentKey) {
+            currentKey = String.fromCharCode(keyCode);
+             }
+        
+          typer.consoleInsert(currentKey);
         }
       }
       if (isWebkit) return false;
+
     });
 
     function isIgnorableKey(e) {
