@@ -296,17 +296,21 @@
                 typer.val("");
             }, 0);
         });
-
+        //helper function to figure out new character added to input
+        difference = function(value1, value2) {
+            var output = [];
+            for (i = 0; i < value2.length; i++) {
+                if (value1[i] !== value2[i]) {
+                    output.push(value2[i]);
+                }
+            }
+            return output.join("");
+        }
         ////////////////////////////////////////////////////////////////////////
         // Handle key hit before translation
         // For picking up control characters like up/left/down/right
-
-        //Old and new input value globals
-        var oldValue;
-        var newValue;
-
-
         typer.keydown(function(e) {
+            typer.oldValue = typer.val();
             oldValue = typer.val();
             cancelKeyPress = 0;
             var keyCode = e.which || e.code;
@@ -348,21 +352,11 @@
 
         });
 
-        //helper function to figure out new character added to input
-        difference = function(value1, value2) {
-            var output = [];
-            for (i = 0; i < value2.length; i++) {
-                if (value1[i] !== value2[i]) {
-                    output.push(value2[i]);
-                }
-            }
-            return output.join("");
-        }
 
         //after input event get new string, figure out the difference and add the character to the typer.
         typer.on("input", function(e) {
-            newValue = typer.val();
-            typer.consoleInsert(difference(oldValue, newValue));
+            var newValue = typer.val();
+            typer.consoleInsert(difference(typer.oldValue, newValue));
         })
 
 
