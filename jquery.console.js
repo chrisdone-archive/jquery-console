@@ -298,6 +298,7 @@
     // For picking up control characters like up/left/down/right
 
     typer.keydown(function(e){
+      console.log(e);
       cancelKeyPress = 0;
       var keyCode = e.which || e.code;
       // C-c: cancel the execution
