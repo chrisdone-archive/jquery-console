@@ -223,8 +223,12 @@
                 var a = $('<br/><div class="action"><a href="javascript:">OK</a><div class="clear"></div></div>');
                 n.append(a);
                 focused = false;
-                a.click(function() { n.fadeOut(function() { n.remove();
-                        inner.css({ opacity: 1 }) }); });
+                a.click(function() {
+                    n.fadeOut(function() {
+                        n.remove();
+                        inner.css({ opacity: 1 })
+                    });
+                });
             }
             var h = n.height();
             n.css({ height: '0px', visibility: 'visible' })
@@ -297,13 +301,13 @@
         // Handle key hit before translation
         // For picking up control characters like up/left/down/right
 
+        //Old and new input value globals
+        var oldValue;
+        var newValue;
 
 
         typer.keydown(function(e) {
-
             oldValue = typer.val();
-            console.log(typer.val());
-            console.log(e);
             cancelKeyPress = 0;
             var keyCode = e.which || e.code;
             // C-c: cancel the execution
@@ -344,10 +348,7 @@
 
         });
 
-        var oldValue;
-        var newValue;
-
-
+        //helper function to figure out new character added to input
         difference = function(value1, value2) {
             var output = [];
             for (i = 0; i < value2.length; i++) {
@@ -358,11 +359,12 @@
             return output.join("");
         }
 
+        //after input event get new string, figure out the difference and add the character to the typer.
         typer.on("input", function(e) {
             newValue = typer.val();
             typer.consoleInsert(difference(oldValue, newValue));
         })
-        
+
 
         function isIgnorableKey(e) {
             // for now just filter alt+tab that we receive on some platforms when
