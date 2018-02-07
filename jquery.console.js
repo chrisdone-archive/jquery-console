@@ -350,6 +350,7 @@
                 if (cancelKeyPress) return false;
             }
 
+
         });
 
 
@@ -357,6 +358,7 @@
         typer.on("input", function(e) {
             var newValue = typer.val();
             typer.consoleInsert(difference(typer.oldValue, newValue));
+            typer.val(difference(typer.oldValue, newValue));
         })
 
 
